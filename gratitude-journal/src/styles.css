@@ -1,0 +1,222 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+body {
+    margin: 0;
+    font-family: "Arial", sans-serif;
+    background: linear-gradient(to right, #ff9a9e, #fad0c4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  
+  /* App Container */
+  .app-container {
+    text-align: center;
+    width: 100%;
+    max-width: 700px;
+    padding: 20px;
+    position: relative;
+  }
+  
+  /* Title */
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 20px;
+  }
+  
+  /* Calendar Icon */
+  .calendar-container {
+    position: absolute;
+    top: 15px;
+    right: 6px;
+    color: black;
+  }
+  
+  .calendar-icon {
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .calendar-icon:hover {
+    transform: scale(1.1);
+  }
+  
+  .calendar-popup {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    left: auto;
+    transform: translateX(50%);
+    width: 240px;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 10px;
+    z-index: 1000;
+    color: black;
+  }
+  
+  /* Fix calendar header text color */
+.react-calendar__navigation {
+    color: black !important;
+    font-weight: bold;
+  }
+  
+  /* Fix day labels (Mon, Tue, etc.) */
+  .react-calendar__month-view__weekdays {
+    color: black !important;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  /* Fix normal date numbers */
+  .react-calendar__tile {
+    color: black !important;
+    font-weight: 500;
+  }
+  
+  /* Fix Sunday's color */
+  .react-calendar__month-view__days__day--weekend {
+    color: red !important;
+  }
+  
+  /* Selected date styling */
+  .react-calendar__tile--active {
+    background-color: blue !important;
+    color: white !important;
+  }
+  
+  /* Hover effect */
+  .react-calendar__tile:hover {
+    background-color: lightgray !important;
+  }
+
+  /* Ensure the month & year navigation is visible */
+.react-calendar__navigation {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    color: black !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    background-color: white !important;
+    padding: 5px 10px !important;
+  }
+  
+  /* Fix navigation buttons (previous & next arrows) */
+  .react-calendar__navigation button {
+    color: black !important;
+    font-size: 18px !important;
+    font-weight: bold !important;
+    background: none !important;
+    border: none !important;
+    cursor: pointer !important;
+  }
+  
+  /* Fix navigation button hover effect */
+  .react-calendar__navigation button:hover {
+    color: darkgray !important;
+  }
+  
+  /* Journal Container */
+  .journal-container {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
+    margin: auto;
+    opacity: 0.95;
+  }
+
+  .journal-container, input, textarea {
+    border: none;
+    outline: none;
+  }
+  
+  h2 {
+    font-size: 1.4rem;
+    color: #333;
+  }
+  
+  /* Input Fields */
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  textarea {
+    height: 110px;
+    resize: none;
+  }
+
+  .save-button {
+    background: #ff9a9e;
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .save-button:hover {
+    background: #e36d75;
+  }
+  
+  .save-button:disabled {
+    background: gray;
+    cursor: not-allowed;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    body {
+        min-height: 100vh;
+      }
+    .journal-container {
+      width: 85%;
+    }
+  
+    .title {
+      font-size: 1.8rem;
+    }
+  
+    .calendar-icon {
+      font-size: 26px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .title {
+      font-size: 1.5rem;
+    }
+  
+    input, textarea {
+      font-size: 0.9rem;
+      padding: 8px;
+    }
+  
+    .calendar-icon {
+      font-size: 22px;
+    }
+  }
+  
