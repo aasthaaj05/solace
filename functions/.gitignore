@@ -10,10 +10,17 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+# Dependencies
+node_modules/
+
+# Build files
 dist
 dist-ssr
 *.local
+
+# Firebase
+functions/node_modules
+functions/lib
 
 # Editor directories and files
 .vscode/*
