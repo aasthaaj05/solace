@@ -54,7 +54,7 @@ const CounsellorSignup = () => {
       alert("Signup successful! Redirecting to login...");
       
       setTimeout(() => {
-        navigate("/login"); // ✅ Ensures navigation happens after alert
+        navigate("/counsellor-dashboard"); // ✅ Ensures navigation happens after alert
       }, 500);
     } catch (error) {
       console.error("Signup failed:", error.message);
