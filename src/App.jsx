@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import Login from "./pages/auth/Login";
 import StudentSignup from "./pages/auth/StudentSignup";
 import CounsellorSignup from "./pages/auth/CounsellorSignup";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/CounsellorDashboard";
 import Home from "./pages/Home"; // Ensure you have a Home page
 import "./index.css";  // ✅ Ensure this import exists in your main entry file
 

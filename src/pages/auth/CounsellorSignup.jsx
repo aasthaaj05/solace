@@ -28,28 +28,40 @@ const CounsellorSignup = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
+      console.log("Signing up user...");
+  
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       const userId = userCredential.user.uid;
-
+  
+      console.log("User created with ID:", userId);
+  
       let degreeProofUrl = "";
       if (degreeProof) {
         const storageRef = ref(storage, `counsellor_degrees/${userId}`);
         await uploadBytes(storageRef, degreeProof);
         degreeProofUrl = await getDownloadURL(storageRef);
+        console.log("Degree proof uploaded:", degreeProofUrl);
       }
-
+  
       await setDoc(doc(db, "counsellors", userId), {
         ...formData,
         degreeProofUrl,
         role: "counsellor",
       });
-
-      navigate("/login");
+  
+      console.log("User document added to Firestore!");
+  
+      alert("Signup successful! Redirecting to login...");
+      
+      setTimeout(() => {
+        navigate("/login"); // ✅ Ensures navigation happens after alert
+      }, 500);
     } catch (error) {
       console.error("Signup failed:", error.message);
+      alert("Signup failed: " + error.message);
     }
   };
-
+  
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#F7CFD8]">
       <div className="w-full max-w-lg p-6 bg-white shadow-lg rounded-lg">

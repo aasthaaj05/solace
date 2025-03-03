@@ -6,6 +6,8 @@ import { doc, getDoc } from "firebase/firestore";
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -13,6 +15,9 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
+
     try {
       const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
       const userId = userCredential.user.uid;
@@ -24,14 +29,22 @@ const Login = () => {
       const counsellorSnap = await getDoc(counsellorRef);
 
       if (studentSnap.exists()) {
-        navigate("/student-dashboard");
+        localStorage.setItem("role", "student");
+        alert("Login successful! Redirecting to student dashboard...");
+        setTimeout(() => navigate("/student-dashboard"), 1500);
       } else if (counsellorSnap.exists()) {
-        navigate("/counsellor-dashboard");
+        localStorage.setItem("role", "counsellor");
+        alert("Login successful! Redirecting to counsellor dashboard...");
+        setTimeout(() => navigate("/counsellor-dashboard"), 1500);
       } else {
-        console.error("User role not found.");
+        throw new Error("User role not found. Please contact support.");
       }
     } catch (error) {
       console.error("Login failed:", error.message);
+      setError(error.message);
+      alert("Login failed: " + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -39,6 +52,7 @@ const Login = () => {
     <div className="flex items-center justify-center min-h-screen bg-[#F4F8D3]">
       <div className="w-full max-w-md p-6 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold text-center text-[#73C7C7]">Login</h2>
+        {error && <p className="text-red-500 text-center">{error}</p>}
         <form onSubmit={handleLogin} className="mt-4">
           <input
             type="email"
@@ -59,8 +73,9 @@ const Login = () => {
           <button
             type="submit"
             className="w-full p-2 text-white bg-[#73C7C7] rounded hover:bg-[#A6F1E0] transition"
+            disabled={loading}
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
       </div>
