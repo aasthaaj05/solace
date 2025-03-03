@@ -4,6 +4,7 @@ import StudentSignup from "./pages/auth/StudentSignup";
 import CounsellorSignup from "./pages/auth/CounsellorSignup";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home"; // Ensure you have a Home page
+import "./index.css";  // ✅ Ensure this import exists in your main entry file
 
 function App() {
   return (
