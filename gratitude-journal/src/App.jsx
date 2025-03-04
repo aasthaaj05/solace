@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import "./styles.css";
 
@@ -76,15 +76,19 @@ function App() {
 
       {/* Calendar Icon */}
       <div className="calendar-container" ref={calendarRef}>
-        <FaRegCalendarAlt className="calendar-icon" onClick={toggleCalendar} />
+        <FaRegCalendarAlt className="calendar-icons" onClick={toggleCalendar} />
         {showCalendar && (
-          <div className="calendar-popup">
-            <Calendar
-              onChange={handleDateClick}
-              value={date}
-              tileContent={({ date }) => (calendarMarks[date.toDateString()] ? "✅" : "")}
-            />
-          </div>
+          <DatePicker
+            selected={date}
+            onChange={(selectedDate) => {
+              handleDateClick(selectedDate);
+              setShowCalendar(false);
+            }}
+            inline
+            dayClassName={(date) =>
+              calendarMarks[date.toDateString()] ? "marked-date" : null
+            }
+          />
         )}
       </div>
 

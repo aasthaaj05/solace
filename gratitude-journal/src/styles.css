@@ -60,14 +60,14 @@ body {
     color: black;
   }
   
-  .calendar-icon {
+  .calendar-icons {
     font-size: 30px;
     cursor: pointer;
     color: white;
     transition: transform 0.2s ease-in-out;
   }
   
-  .calendar-icon:hover {
+  .calendar-icons:hover {
     transform: scale(1.1);
   }
   
@@ -239,6 +239,20 @@ body {
     }
   }
 
+  .marked-date {
+    position: relative;
+  }
+  
+  .marked-date::after {
+    content: "✔"; /* Tick mark */
+    color: green;
+    font-size: 14px;
+    position: absolute;
+    bottom: 2px;
+    right: 5px;
+  }
+  
+  
 
   /*let it out*/
 
