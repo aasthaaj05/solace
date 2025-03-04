@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { FaRegCalendarAlt } from "react-icons/fa";
@@ -68,6 +69,9 @@ function App() {
 
   return (
     <div className="app-container">
+      {/* Back Button (Top Left Corner) */}
+      <Link to="/" className="back-button">← Back</Link>
+
       <h1 className="title">Gratitude Journal</h1>
 
       {/* Calendar Icon */}
