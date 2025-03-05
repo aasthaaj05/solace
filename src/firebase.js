@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, collection, getDocs, addDoc, query, where } from "firebase/firestore"; // ✅ Import these
 import { getAnalytics } from "firebase/analytics";
 import { getStorage } from "firebase/storage";
 
@@ -19,7 +19,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app); 
+const storage = getStorage(app);
 const analytics = getAnalytics(app);
 
 // ✅ Export Firebase utilities
@@ -29,6 +29,11 @@ export {
   db,
   storage,
   analytics,
+  where,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  collection, // ✅ Export collection
+  query,
+  getDocs,
+  addDoc,
 };

@@ -4,6 +4,8 @@ import StudentSignup from "./pages/auth/StudentSignup";
 import CounsellorSignup from "./pages/auth/CounsellorSignup";
 import CounsellorDashboard from "./pages/CounsellorDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
+import CalendarPage from "./pages/CalendarPage";
+// import MeetingScheduler from "./components/counsellor/MeetingScheduler";
 import Home from "./pages/Home"; // Ensure you have a Home page
 import "./index.css";  // ✅ Ensure this import exists in your main entry file
 
@@ -17,6 +19,8 @@ function App() {
         <Route path="/signup/counsellor" element={<CounsellorSignup />} />
         <Route path="/counsellor-dashboard" element={<CounsellorDashboard />} />
         <Route path="/student-dashboard" element={<StudentDashboard />} />
+        <Route path="/calendar" element={<CalendarPage />} />
+        {/* <Route path="/schedule-meeting" element={<MeetingScheduler />} /> */}
         <Route path="*" element={<Navigate to="/login" />} /> {/* Redirect unknown routes */}
       </Routes>
     </Router>

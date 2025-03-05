@@ -1,19 +1,34 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * const {onCall} = require("firebase-functions/v2/https");
- * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
-
-const {onRequest} = require("firebase-functions/v2/https");
+const { onRequest } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
+const stripe = require("stripe")("sk_test_51QDNGBJPq8Wa0huqm9MQTscuGRoqIdeSrc1AWl8Y0UZQpK2ZHeVa4dNax6JrQohXcvDqXwMEErwErppmBqqAewzL00IZRW5T2C");
+const cors = require("cors")({ origin: true });
 
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
+exports.createCheckoutSession = onRequest(async (req, res) => {
+    cors(req, res, async () => {
+        try {
+            const { amount, currency } = req.body; // Amount in cents
 
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+            const session = await stripe.checkout.sessions.create({
+                payment_method_types: ["card"],
+                line_items: [
+                    {
+                        price_data: {
+                            currency: currency || "usd",
+                            product_data: { name: "Your Product" },
+                            unit_amount: amount,
+                        },
+                        quantity: 1,
+                    },
+                ],
+                mode: "payment",
+                success_url: "https://your-app.com/success",
+                cancel_url: "https://your-app.com/cancel",
+            });
+
+            res.json({ sessionId: session.id });
+        } catch (error) {
+            logger.error("Error creating Stripe session", error);
+            res.status(500).json({ error: error.message });
+        }
+    });
+});

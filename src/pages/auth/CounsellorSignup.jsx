@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, db, storage, createUserWithEmailAndPassword } from "../../firebase";
+import { auth, db, createUserWithEmailAndPassword } from "../../firebase";
 import { setDoc, doc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const CounsellorSignup = () => {
   const navigate = useNavigate();
@@ -15,14 +14,8 @@ const CounsellorSignup = () => {
     password: "",
   });
 
-  const [degreeProof, setDegreeProof] = useState(null);
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleFileChange = (e) => {
-    setDegreeProof(e.target.files[0]);
   };
 
   const handleSignup = async (e) => {
@@ -35,26 +28,18 @@ const CounsellorSignup = () => {
   
       console.log("User created with ID:", userId);
   
-      let degreeProofUrl = "";
-      if (degreeProof) {
-        const storageRef = ref(storage, `counsellor_degrees/${userId}`);
-        await uploadBytes(storageRef, degreeProof);
-        degreeProofUrl = await getDownloadURL(storageRef);
-        console.log("Degree proof uploaded:", degreeProofUrl);
-      }
-  
+      // Store Counsellor Data in Firestore (without degree proof)
       await setDoc(doc(db, "counsellors", userId), {
         ...formData,
-        degreeProofUrl,
         role: "counsellor",
       });
   
-      console.log("User document added to Firestore!");
-  
-      alert("Signup successful! Redirecting to login...");
+      console.log("Counsellor document added to Firestore!");
+
+      alert("Signup successful! Redirecting to dashboard...");
       
       setTimeout(() => {
-        navigate("/counsellor-dashboard"); // ✅ Ensures navigation happens after alert
+        navigate("/counsellor-dashboard");
       }, 500);
     } catch (error) {
       console.error("Signup failed:", error.message);
@@ -89,15 +74,6 @@ const CounsellorSignup = () => {
             placeholder="Phone Number"
             className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#73C7C7]"
             onChange={handleChange}
-            required
-          />
-
-          <label className="block text-sm font-medium text-gray-600">Degree Proof (Upload Image)</label>
-          <input
-            type="file"
-            accept="image/*"
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#73C7C7]"
-            onChange={handleFileChange}
             required
           />
 
