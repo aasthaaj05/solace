@@ -35,14 +35,14 @@ const CounsellorDashboard = () => {
       alert("Please select a patient first.");
       return;
     }
-    
+
     const newMeeting = { date, startTime, endTime, patientId: selectedPatient.id };
     const isSlotTaken = meetings.some(meeting => meeting.date === date && meeting.startTime === startTime);
     if (isSlotTaken) {
       alert("This time slot is already booked. Please choose another slot.");
       return;
     }
-    
+
     setMeetings([...meetings, newMeeting]);
     setSchedulingMeeting(false);
     setDate("");
