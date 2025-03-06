@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { db } from '../firebase';
+import { db } from '../../../firebase';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
 
-function AdminDashboard() {
+function AdminDashboard2() {
   const [responses, setResponses] = useState([]);
   const [loading, setLoading] = useState(true);
   const { currentUser, logout } = useAuth();
@@ -170,4 +170,4 @@ function getScoreColor(percentage) {
   return '#4caf50'; // green
 }
 
-export default AdminDashboard;
+export default AdminDashboard2;

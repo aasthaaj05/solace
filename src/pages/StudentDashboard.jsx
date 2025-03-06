@@ -62,6 +62,10 @@ const StudentDashboard = () => {
     navigate("/questionnaire");
   };
 
+  const handleCrisisClick = () => {
+    navigate("/crisis");
+  };
+
   // Reusable button component
   const DashboardButton = ({ icon, text, onClick }) => (
     <motion.button
@@ -188,7 +192,7 @@ const StudentDashboard = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {[
                 { icon: <FaTasks className="text-black" />, text: "Opinion Hub", onClick: handleQuestionnaireClick },
-                { icon: <FaBrain className="text-black" />, text: "Your Perspective" },
+                { icon: <FaBrain className="text-black" />, text: "Your Perspective",  onClick: handleCrisisClick },
                 { icon: <FaRedoAlt className="text-black" />, text: "Chore Roulette" },
               ].map((item, index) => (
                 <DashboardButton key={index} {...item} />

@@ -36,6 +36,11 @@ import AdminDashboard1 from './components/student/questionnaire/AdminDashboard';
 import PrivateRoute from './components/student/questionnaire/PrivateRoute';
 import { AuthProvider } from './contexts/AuthContext';
 
+//Crisis
+import AdminDashboard2 from './components/student/crisis/AdminDashboard';
+import Login2 from './components/student/crisis/Login';
+import PrivateRoute2 from './components/student/crisis/PrivateRoute';
+import Crisisquiz from './components/student/crisis/Crisisquiz';
 
 // Create a client for React Query
 const queryClient = new QueryClient();
@@ -49,7 +54,7 @@ function App() {
         <AuthProvider>
         <BrowserRouter>
         <Routes>
-          
+            {/* Questionnaire Routes */}
             <Route path="/questionnaire" element={<Questionnaire />} />
             <Route path="/login1" element={<Login1 />} />
             <Route 
@@ -59,9 +64,19 @@ function App() {
                   <AdminDashboard1 />
                 </PrivateRoute>
               } 
+            />      
+
+            {/* Crisis Routes */}
+            <Route path="/crisis" element={<Crisisquiz />} />
+            <Route path="/login" element={<Login2 />} />
+            <Route 
+              path="/admin" 
+              element={
+                <PrivateRoute2>
+                  <AdminDashboard2 />
+                </PrivateRoute2>
+              } 
             />
-          
-        
           
             {/* Default Route */}
             <Route path="/" element={<Home />} />

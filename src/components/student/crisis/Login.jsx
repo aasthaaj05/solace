@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import './Login.css';
 
-function Login() {
+function Login2() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -60,4 +60,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Login2;
