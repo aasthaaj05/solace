@@ -5,19 +5,7 @@ import StudNavbar from "../components/student/StudNavbar";
 import AnimatedBackground from "../components/AnimatedBackground";
 import { motion } from "framer-motion";
 import {
-  FaQuoteLeft,
-  FaCalendar,
-  FaTasks,
-  FaBrain,
-  FaRedoAlt,
-  FaHeart,
-  FaComments,
-  FaSmile,
-  FaHandsHelping,
-  FaCloud,
-  FaMusic,
-  FaUsers,
-  FaBriefcase,
+  FaQuoteLeft, FaCalendar, FaTasks, FaBrain, FaRedoAlt, FaHeart, FaComments, FaSmile, FaHandsHelping,  FaCloud, FaMusic, FaUsers, FaBriefcase,
 } from "react-icons/fa";
 
 // Sample quotes for the hero section
@@ -64,6 +52,14 @@ const StudentDashboard = () => {
   // Navigation handlers
   const handleGuidedMeditationClick = () => {
     navigate("/guided-meditations");
+  };
+
+  const handleExamClick = () => {
+    navigate("/exam-harmony");
+  };
+
+  const handleQuestionnaireClick = () => {
+    navigate("/questionnaire");
   };
 
   // Reusable button component
@@ -148,7 +144,7 @@ const StudentDashboard = () => {
     whileHover={{ scale: 1.05 }}
     whileTap={{ scale: 0.95 }}
     className="w-full bg-[#DBEAFE] text-black font-semibold px-4 sm:px-6 py-3 sm:py-4 rounded-lg shadow-md hover:shadow-lg transition duration-200 flex items-center justify-center gap-2"
-  >
+    onClick={handleExamClick}>
     <FaCalendar className="text-lg sm:text-xl" />
     <span className="text-sm sm:text-lg md:text-xl">Sync your Exams</span>
   </motion.button>
@@ -191,11 +187,11 @@ const StudentDashboard = () => {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {[
-                { icon: <FaTasks className="text-black" />, text: "Opinion Hub" },
+                { icon: <FaTasks className="text-black" />, text: "Opinion Hub", onClick: handleQuestionnaireClick },
                 { icon: <FaBrain className="text-black" />, text: "Your Perspective" },
                 { icon: <FaRedoAlt className="text-black" />, text: "Chore Roulette" },
               ].map((item, index) => (
-                <DashboardButton key={index} {...item} onClick={() => {}} />
+                <DashboardButton key={index} {...item} />
               ))}
             </div>
           </motion.div>
