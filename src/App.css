@@ -1,0 +1,123 @@
+/* Ensure full background coverage */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: linear-gradient(135deg, 
+    #F7CFD8,  /* Soft Pink */
+    #A6F1E0,  /* Light Aqua */
+    #FFE6A9,  /* Warm Yellow-Orange */
+    #73C7C7,  /* Teal Blue */
+    #F4F8D3   /* Pale Yellow-Green */
+  );
+  background-size: cover;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Center content vertically */
+}
+
+/* Main container */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative; /* Ensure chatbot is positioned separately */
+}
+
+/* Ensure h1 is visible */
+h1 {
+  color: #333;
+  font-size: 2.5rem;
+  margin-bottom: 3.5rem;
+  text-align: center;
+}
+
+/* Centering the Spinner */
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Chatbot Container */
+.chatbox {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 350px;
+  max-width: 100%;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Chatbot Button */
+.chatbox__button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Chatbot Window */
+.chatbox__support {
+  display: flex;
+  flex-direction: column;
+  background: #222;
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  max-height: 400px;
+}
+
+/* Chatbot Header */
+.chatbox__header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background: #333;
+}
+
+/* Chatbot Messages */
+.chatbox__messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+/* Chat Input */
+.chatbox__footer {
+  display: flex;
+  padding: 10px;
+  background: #333;
+}
+
+.chatbox__footer input {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+}
+
+.chatbox__footer button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
