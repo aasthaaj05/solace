@@ -10,6 +10,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 // import MeetingScheduler from "./components/counsellor/MeetingScheduler";
 import Home from "./pages/Home"; // Ensure you have a Home page
 import "./index.css";  // ✅ Ensure this import exists in your main entry file
+import GuidedMeditations from "./pages/GuidedMeditations";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/guided-meditations" element={<GuidedMeditations />} />
         {/* <Route path="/schedule-meeting" element={<MeetingScheduler />} /> */}
         <Route path="*" element={<Navigate to="/login" />} /> {/* Redirect unknown routes */}
       </Routes>

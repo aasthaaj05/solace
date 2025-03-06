@@ -77,7 +77,7 @@ const CounsellorDashboard = () => {
             </ul>
           </aside>
         )}
-        <main className="flex-grow p-6">
+        <main className="flex-grow">
           {selectedPatient ? (
             <div className="bg-white p-6 rounded-xl shadow-lg relative">
               <button className="absolute top-3 right-3 text-gray-500 hover:text-gray-700" onClick={() => setSelectedPatient(null)}>
@@ -133,9 +133,21 @@ const CounsellorDashboard = () => {
               )}
             </div>
           ) : (
-            <div>
-              <h2 className="text-3xl font-bold text-[#73C7C7] mb-3">{quote}</h2>
-              <p className="text-[#5A9A9A] text-lg">Your work is making the world a better place!</p>
+            <div className="relative w-full h-[calc(100vh-4rem)]"> {/* Adjusted height to start after navbar */}
+              {/* Background Image with Overlay */}
+              <div
+                className="absolute top-0 left-0 w-full h-[60vh] bg-cover bg-center"
+                style={{ backgroundImage: "url(/images/counsellor-quote-bg.jpg)" }}
+              >
+                <div className="absolute inset-0 bg-black bg-opacity-40"></div> {/* Dark overlay for contrast */}
+              </div>
+
+              {/* Quote Content */}
+              <div className="relative z-10 text-center max-w-2xl mx-auto pt-20"> {/* Adjusted padding-top */}
+                <p className="text-lg text-white font-medium">Welcome, Counsellor!</p>
+                <h2 className="text-4xl font-bold text-white mb-4">{quote}</h2>
+                <p className="text-lg text-white font-medium">Your work is making the world a better place!</p>
+              </div>
             </div>
           )}
         </main>

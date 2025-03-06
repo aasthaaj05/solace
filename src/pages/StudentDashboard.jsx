@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { auth, db, doc, setDoc, getDoc } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import StudNavbar from "../components/student/StudNavbar";
-import AnimatedBackground from "../components/AnimatedBackground"; 
+import AnimatedBackground from "../components/AnimatedBackground";
 import { motion } from "framer-motion";
 import {
   FaQuoteLeft,
@@ -43,6 +43,7 @@ const StudentDashboard = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Handle user authentication and data fetching
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -59,6 +60,24 @@ const StudentDashboard = () => {
 
     return () => unsubscribe();
   }, [navigate]);
+
+  // Navigation handlers
+  const handleGuidedMeditationClick = () => {
+    navigate("/guided-meditations");
+  };
+
+  // Reusable button component
+  const DashboardButton = ({ icon, text, onClick }) => (
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className="bg-[#E0F2FE] text-black font-semibold px-3 sm:px-4 py-2 sm:py-3 rounded-lg shadow-sm hover:shadow-md transition duration-200 flex items-center justify-center gap-2"
+      onClick={onClick}
+    >
+      {icon}
+      <span className="text-xs sm:text-sm">{text}</span>
+    </motion.button>
+  );
 
   return (
     <motion.div
@@ -79,7 +98,7 @@ const StudentDashboard = () => {
       <div
         className="relative w-full h-[40vh] sm:h-[50vh] md:h-[60vh] bg-cover bg-center flex items-center justify-center"
         style={{
-          backgroundImage: "url(/images/student-quote-bg.jpg)", // Path relative to the public folder
+          backgroundImage: "url(/images/student-quote-bg.jpg)",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -123,16 +142,16 @@ const StudentDashboard = () => {
             className="bg-white/50 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-lg border border-white/10"
           >
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-black mb-4 sm:mb-6 flex items-center gap-2">
-              📚 Exam Harmony
-            </h2>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="w-full bg-[#DBEAFE] text-black font-semibold px-4 sm:px-6 py-3 sm:py-4 rounded-lg shadow-md hover:shadow-lg transition duration-200 flex items-center justify-center gap-2"
-            >
-              <FaCalendar className="text-lg sm:text-xl" />
-              <span className="text-sm sm:text-lg md:text-xl">Sync your Exams</span>
-            </motion.button>
+    📚 Exam Harmony
+  </h2>
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="w-full bg-[#DBEAFE] text-black font-semibold px-4 sm:px-6 py-3 sm:py-4 rounded-lg shadow-md hover:shadow-lg transition duration-200 flex items-center justify-center gap-2"
+  >
+    <FaCalendar className="text-lg sm:text-xl" />
+    <span className="text-sm sm:text-lg md:text-xl">Sync your Exams</span>
+  </motion.button>
           </motion.div>
 
           {/* Self-Care Zone Section */}
@@ -152,15 +171,7 @@ const StudentDashboard = () => {
                 { icon: <FaSmile className="text-black" />, text: "Gratitude Wall" },
                 { icon: <FaHandsHelping className="text-black" />, text: "Feel Worthy" },
               ].map((item, index) => (
-                <motion.button
-                  key={index}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-[#E0F2FE] text-black font-semibold px-3 sm:px-4 py-2 sm:py-3 rounded-lg shadow-sm hover:shadow-md transition duration-200 flex items-center justify-center gap-2"
-                >
-                  {item.icon}
-                  <span className="text-xs sm:text-sm">{item.text}</span>
-                </motion.button>
+                <DashboardButton key={index} {...item} onClick={() => {}} />
               ))}
             </div>
           </motion.div>
@@ -184,15 +195,7 @@ const StudentDashboard = () => {
                 { icon: <FaBrain className="text-black" />, text: "Your Perspective" },
                 { icon: <FaRedoAlt className="text-black" />, text: "Chore Roulette" },
               ].map((item, index) => (
-                <motion.button
-                  key={index}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-[#E0F2FE] text-black font-semibold px-3 sm:px-4 py-2 sm:py-3 rounded-lg shadow-sm hover:shadow-md transition duration-200 flex items-center justify-center gap-2"
-                >
-                  {item.icon}
-                  <span className="text-xs sm:text-sm">{item.text}</span>
-                </motion.button>
+                <DashboardButton key={index} {...item} onClick={() => {}} />
               ))}
             </div>
           </motion.div>
@@ -209,20 +212,12 @@ const StudentDashboard = () => {
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
               {[
-                { icon: <FaCloud className="text-black" />, text: "Guided Meditation" },
-                { icon: <FaMusic className="text-black" />, text: "Music" },
-                { icon: <FaUsers className="text-black" />, text: "Community Support" },
-                { icon: <FaBriefcase className="text-black" />, text: "Professional Resources" },
+                { icon: <FaCloud className="text-black" />, text: "Guided Meditation", onClick: handleGuidedMeditationClick },
+                { icon: <FaMusic className="text-black" />, text: "Music", onClick: () => {} },
+                { icon: <FaUsers className="text-black" />, text: "Community Support", onClick: () => {} },
+                { icon: <FaBriefcase className="text-black" />, text: "Professional Resources", onClick: () => {} },
               ].map((item, index) => (
-                <motion.button
-                  key={index}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-[#E0F2FE] text-black font-semibold px-3 sm:px-4 py-2 sm:py-3 rounded-lg shadow-sm hover:shadow-md transition duration-200 flex items-center justify-center gap-2"
-                >
-                  {item.icon}
-                  <span className="text-xs sm:text-sm">{item.text}</span>
-                </motion.button>
+                <DashboardButton key={index} {...item} />
               ))}
             </div>
           </motion.div>
