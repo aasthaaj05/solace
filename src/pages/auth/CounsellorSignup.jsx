@@ -12,41 +12,79 @@ const CounsellorSignup = () => {
     gender: "",
     costPerHour: "",
     password: "",
+    confirmPassword: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  const validatePassword = (password) => {
+    return password.length >= 8; // Minimum 8 characters
+  };
+
   const handleSignup = async (e) => {
     e.preventDefault();
+    if (loading) return;
+
+    if (!validateEmail(formData.email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    if (!validatePassword(formData.password)) {
+      alert("Password must be at least 8 characters long.");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
     try {
       console.log("Signing up user...");
-  
+
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       const userId = userCredential.user.uid;
-  
+
       console.log("User created with ID:", userId);
-  
-      // Store Counsellor Data in Firestore (without degree proof)
+
+      // Store Counsellor Data in Firestore (without password)
+      const { password, confirmPassword, ...userDataWithoutPassword } = formData;
       await setDoc(doc(db, "counsellors", userId), {
-        ...formData,
+        ...userDataWithoutPassword,
         role: "counsellor",
       });
-  
+
       console.log("Counsellor document added to Firestore!");
 
       alert("Signup successful! Redirecting to dashboard...");
-      
+
       setTimeout(() => {
         navigate("/counsellor-dashboard");
       }, 500);
     } catch (error) {
       console.error("Signup failed:", error.message);
-      alert("Signup failed: " + error.message);
+      if (error.code === "auth/email-already-in-use") {
+        alert("This email is already in use. Please use a different email.");
+      } else if (error.code === "auth/weak-password") {
+        alert("Password is too weak. Please use a stronger password.");
+      } else {
+        alert("Signup failed: " + error.message);
+      }
+    } finally {
+      setLoading(false);
     }
   };
-  
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#F7CFD8]">
       <div className="w-full max-w-lg p-6 bg-white shadow-lg rounded-lg">
@@ -106,9 +144,21 @@ const CounsellorSignup = () => {
             onChange={handleChange}
             required
           />
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#73C7C7]"
+            onChange={handleChange}
+            required
+          />
 
-          <button type="submit" className="w-full p-2 text-white bg-[#73C7C7] rounded hover:bg-[#A6F1E0] transition">
-            Signup
+          <button
+            type="submit"
+            className="w-full p-2 text-white bg-[#73C7C7] rounded hover:bg-[#A6F1E0] transition"
+            disabled={loading}
+          >
+            {loading ? "Signing up..." : "Signup"}
           </button>
         </form>
       </div>

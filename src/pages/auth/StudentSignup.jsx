@@ -13,25 +13,85 @@ const StudentSignup = () => {
     rollNo: "",
     gender: "",
     password: "",
+    confirmPassword: "",
   });
 
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  const validatePassword = (password) => {
+    return password.length >= 8; // Minimum 8 characters
+  };
+
   const handleSignup = async (e) => {
     e.preventDefault();
+    if (loading) return;
+
+    // Validate email
+    if (!validateEmail(formData.email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    // Validate password
+    if (!validatePassword(formData.password)) {
+      alert("Password must be at least 8 characters long.");
+      return;
+    }
+
+    // Check if passwords match
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-      await setDoc(doc(db, "students", userCredential.user.uid), {
-        ...formData,
+      console.log("Signing up user...");
+
+      // Create user with Firebase Authentication
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      const userId = userCredential.user.uid;
+
+      console.log("User created with ID:", userId);
+
+      // Store student data in Firestore (without password or confirmPassword)
+      const { password, confirmPassword, ...userDataWithoutPassword } = formData;
+      await setDoc(doc(db, "students", userId), {
+        ...userDataWithoutPassword,
         role: "student",
       });
+
+      console.log("Student document added to Firestore!");
+
+      alert("Signup successful! Redirecting to dashboard...");
+
+      // Redirect to student dashboard
       navigate("/student-dashboard");
     } catch (error) {
       console.error("Signup failed:", error.message);
+      if (error.code === "auth/email-already-in-use") {
+        alert("This email is already in use. Please use a different email.");
+      } else if (error.code === "auth/weak-password") {
+        alert("Password is too weak. Please use a stronger password.");
+      } else {
+        alert("Signup failed: " + error.message);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -40,8 +100,9 @@ const StudentSignup = () => {
       <form onSubmit={handleSignup} className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-semibold text-center text-[#73C7C7] mb-4">Student Signup</h2>
 
+        {/* Render form fields dynamically */}
         {Object.keys(formData).map((key) =>
-          key !== "password" && key !== "gender" ? (
+          key !== "password" && key !== "confirmPassword" && key !== "gender" ? (
             <input
               key={key}
               type={key === "dob" ? "date" : "text"}
@@ -80,12 +141,24 @@ const StudentSignup = () => {
           required
         />
 
+        {/* Confirm Password Input */}
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          name="confirmPassword"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          className="w-full p-3 border rounded-lg bg-[#F4F8D3] focus:outline-none focus:ring-2 focus:ring-[#73C7C7] text-gray-700 mt-2"
+          required
+        />
+
         {/* Signup Button */}
         <button
           type="submit"
           className="w-full p-3 mt-4 text-white bg-[#73C7C7] rounded-lg font-semibold hover:bg-[#A6F1E0] transition-all"
+          disabled={loading}
         >
-          Sign Up
+          {loading ? "Signing up..." : "Sign Up"}
         </button>
       </form>
     </div>

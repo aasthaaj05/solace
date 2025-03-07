@@ -42,6 +42,10 @@ import Login2 from './components/student/crisis/Login';
 import PrivateRoute2 from './components/student/crisis/PrivateRoute';
 import Crisisquiz from './components/student/crisis/Crisisquiz';
 
+//professional
+import Helpline from './components/student/professional/Helpline'
+import ContactCounsellor from './components/student/professional/ContactCounsellor'
+
 // Create a client for React Query
 const queryClient = new QueryClient();
 
@@ -54,6 +58,10 @@ function App() {
         <AuthProvider>
         <BrowserRouter>
         <Routes>
+            {/* Professional Routes */}
+            <Route path="/helpline" element={<Helpline />} />
+            <Route path="/contact-counsellor" element={<ContactCounsellor />} />
+
             {/* Questionnaire Routes */}
             <Route path="/questionnaire" element={<Questionnaire />} />
             <Route path="/login1" element={<Login1 />} />
@@ -68,7 +76,7 @@ function App() {
 
             {/* Crisis Routes */}
             <Route path="/crisis" element={<Crisisquiz />} />
-            <Route path="/login" element={<Login2 />} />
+            <Route path="/login2" element={<Login2 />} />
             <Route 
               path="/admin" 
               element={

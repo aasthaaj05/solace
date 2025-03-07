@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { FaUserCircle, FaBars, FaTimes } from "react-icons/fa";
+import { collection, getDocs, doc, updateDoc, query, where, addDoc } from "firebase/firestore";
+import { db, auth } from "../firebase"; // Adjust the import path as needed
+import { FaBars } from "react-icons/fa";
 import Navbar from "../components/counsellor/Navbar";
-
-const patients = [
-  { id: 1, name: "John Doe", age: 32, condition: "Anxiety", notes: "Progressing well with therapy.", hours: 10, sessions: 5 },
-  { id: 2, name: "Jane Smith", age: 28, condition: "Depression", notes: "Needs more follow-ups.", hours: 15, sessions: 8 }
-];
 
 const quotes = [
   "Helping one person might not change the whole world, but it could change the world for one person.",
@@ -17,137 +14,270 @@ const quotes = [
 
 const CounsellorDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedPatient, setSelectedPatient] = useState(null);
-  const [viewingNotes, setViewingNotes] = useState(false);
+  const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [quote, setQuote] = useState("");
+  const [selectedRequest, setSelectedRequest] = useState(null);
   const [schedulingMeeting, setSchedulingMeeting] = useState(false);
-  const [meetings, setMeetings] = useState([]);
   const [date, setDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [quote, setQuote] = useState("");
 
+  // Fetch requests for the logged-in counsellor
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const user = auth.currentUser;
+        if (!user) {
+          console.error("No authenticated user");
+          return;
+        }
+
+        const requestsQuery = query(
+          collection(db, "contactRequests"),
+          where("counsellorId", "==", user.uid)
+        );
+
+        const requestsSnapshot = await getDocs(requestsQuery);
+        const requestsList = requestsSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setRequests(requestsList);
+      } catch (error) {
+        console.error("Error fetching requests: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRequests();
+  }, []);
+
+  // Handle accepting or declining a request
+  const handleRequestAction = async (requestId, action) => {
+    try {
+      const requestRef = doc(db, "contactRequests", requestId);
+      await updateDoc(requestRef, {
+        status: action,
+      });
+
+      setRequests((prevRequests) =>
+        prevRequests.map((request) =>
+          request.id === requestId ? { ...request, status: action } : request
+        )
+      );
+
+      alert(`Request ${action} successfully!`);
+    } catch (error) {
+      console.error("Error updating request: ", error);
+      alert("Failed to update request. Please try again.");
+    }
+  };
+
+  // Check for overlapping meetings
+  const isTimeSlotAvailable = async (counsellorId, date, startTime, endTime) => {
+    try {
+      const meetingsQuery = query(
+        collection(db, "meetings"),
+        where("counsellorId", "==", counsellorId),
+        where("date", "==", date)
+      );
+
+      const meetingsSnapshot = await getDocs(meetingsQuery);
+      const meetings = meetingsSnapshot.docs.map((doc) => doc.data());
+
+      // Check for overlapping time slots
+      for (const meeting of meetings) {
+        if (
+          (startTime >= meeting.startTime && startTime < meeting.endTime) ||
+          (endTime > meeting.startTime && endTime <= meeting.endTime) ||
+          (startTime <= meeting.startTime && endTime >= meeting.endTime)
+        ) {
+          return false; // Time slot is not available
+        }
+      }
+
+      return true; // Time slot is available
+    } catch (error) {
+      console.error("Error checking time slot availability: ", error);
+      return false;
+    }
+  };
+
+  // Handle scheduling a meeting
+  const handleScheduleMeeting = async () => {
+    if (!date || !startTime || !endTime) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    if (startTime >= endTime) {
+      alert("End time must be after start time.");
+      return;
+    }
+
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        alert("No authenticated user.");
+        return;
+      }
+
+      // Check if the time slot is available
+      const isAvailable = await isTimeSlotAvailable(user.uid, date, startTime, endTime);
+      if (!isAvailable) {
+        alert("This time slot is already booked. Please choose another slot.");
+        return;
+      }
+
+      // Save the meeting
+      const meetingData = {
+        counsellorId: user.uid,
+        studentId: selectedRequest.studentId,
+        date,
+        startTime,
+        endTime,
+        status: "scheduled",
+      };
+
+      const meetingsCollection = collection(db, "meetings");
+      await addDoc(meetingsCollection, meetingData);
+
+      alert("Meeting scheduled successfully!");
+      setSchedulingMeeting(false);
+      setDate("");
+      setStartTime("");
+      setEndTime("");
+    } catch (error) {
+      console.error("Error scheduling meeting: ", error);
+      alert("Failed to schedule meeting. Please try again.");
+    }
+  };
+
+  // Set a random quote on component mount
   useEffect(() => {
     setQuote(quotes[Math.floor(Math.random() * quotes.length)]);
   }, []);
-
-  const bookMeeting = () => {
-    if (!selectedPatient) {
-      alert("Please select a patient first.");
-      return;
-    }
-
-    const newMeeting = { date, startTime, endTime, patientId: selectedPatient.id };
-    const isSlotTaken = meetings.some(meeting => meeting.date === date && meeting.startTime === startTime);
-    if (isSlotTaken) {
-      alert("This time slot is already booked. Please choose another slot.");
-      return;
-    }
-
-    setMeetings([...meetings, newMeeting]);
-    setSchedulingMeeting(false);
-    setDate("");
-    setStartTime("");
-    setEndTime("");
-    alert("Meeting successfully scheduled!");
-  };
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F4F8D3]">
       <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       <div className="flex flex-grow">
+        {/* Sidebar */}
         {sidebarOpen && (
           <aside className="w-64 bg-[#A6F1E0] shadow-lg p-4 rounded-r-2xl">
             <h2 className="text-xl font-semibold text-[#73C7C7] mb-3 border-b-2 border-[#73C7C7] pb-1">
-              Patients
+              Requests
             </h2>
             <ul className="space-y-2">
-              {patients.map(patient => (
+              {requests.map((request) => (
                 <li
-                  key={patient.id}
-                  className={`cursor-pointer px-3 py-2 rounded-lg text-[#5A9A9A] ${selectedPatient?.id === patient.id ? "bg-[#F7CFD8]" : "bg-[#F4F8D3]"} hover:bg-[#F7CFD8] transition`}
-                  onClick={() => {
-                    setSelectedPatient(patient);
-                    setViewingNotes(false);
-                    setSchedulingMeeting(false);
-                  }}
+                  key={request.id}
+                  className={`cursor-pointer px-3 py-2 rounded-lg text-[#5A9A9A] bg-[#F4F8D3] hover:bg-[#F7CFD8] transition ${
+                    selectedRequest?.id === request.id ? "bg-[#F7CFD8]" : ""
+                  }`}
+                  onClick={() => setSelectedRequest(request)}
                 >
-                  {patient.name}
+                  {request.studentName} - {request.status}
                 </li>
               ))}
             </ul>
           </aside>
         )}
-        <main className="flex-grow">
-          {selectedPatient ? (
-            <div className="bg-white p-6 rounded-xl shadow-lg relative">
-              <button className="absolute top-3 right-3 text-gray-500 hover:text-gray-700" onClick={() => setSelectedPatient(null)}>
-                <FaTimes size={20} />
-              </button>
-              <h2 className="text-3xl font-bold text-[#73C7C7] mb-2">{selectedPatient.name}</h2>
-              <p className="text-lg text-gray-700"><strong>Age:</strong> {selectedPatient.age}</p>
-              <p className="text-lg text-gray-700"><strong>Condition:</strong> {selectedPatient.condition}</p>
-              <p className="text-lg text-gray-700"><strong>Hours of Therapy:</strong> {selectedPatient.hours}</p>
-              <p className="text-lg text-gray-700"><strong>Sessions Taken:</strong> {selectedPatient.sessions}</p>
-              <div className="mt-4 space-x-3">
-                <button className="bg-[#73C7C7] text-white px-4 py-2 rounded-lg hover:bg-[#5A9A9A] transition" onClick={() => setViewingNotes(true)}>
-                  View Session Notes
-                </button>
-                <button className="bg-[#F7CFD8] text-white px-4 py-2 rounded-lg hover:bg-[#E6BFC0] transition">
-                  Chat
-                </button>
-                <button className="bg-[#A6F1E0] text-white px-4 py-2 rounded-lg hover:bg-[#8FD8C8] transition" onClick={() => setSchedulingMeeting(true)}>
-                  Schedule Meeting
-                </button>
-              </div>
-              {viewingNotes && (
-                <div className="bg-white p-6 mt-4 rounded-xl shadow-lg">
-                  <h3 className="text-2xl font-bold text-[#73C7C7]">Session Notes</h3>
-                  <p className="text-gray-700 mt-2">{selectedPatient.notes}</p>
-                  <button className="mt-3 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition" onClick={() => setViewingNotes(false)}>
-                    Close
-                  </button>
-                </div>
-              )}
-              {schedulingMeeting && (
-                <div className="bg-white p-6 mt-4 rounded-xl shadow-lg">
-                  <h3 className="text-2xl font-bold text-[#73C7C7]">Schedule Meeting</h3>
-                  <div className="mt-3">
-                    <label className="block text-gray-700">Date:</label>
-                    <input type="date" value={date} onChange={e => setDate(e.target.value)} className="border rounded p-2 w-full" />
-                  </div>
-                  <div className="mt-3">
-                    <label className="block text-gray-700">Start Time:</label>
-                    <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} className="border rounded p-2 w-full" />
-                  </div>
-                  <div className="mt-3">
-                    <label className="block text-gray-700">End Time:</label>
-                    <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} className="border rounded p-2 w-full" />
-                  </div>
-                  <button className="mt-4 bg-[#73C7C7] text-white px-4 py-2 rounded-lg hover:bg-[#5A9A9A] transition" onClick={bookMeeting}>
-                    Book Meeting
-                  </button>
-                  <button className="mt-4 ml-3 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition" onClick={() => setSchedulingMeeting(false)}>
-                    Cancel
-                  </button>
-                </div>
-              )}
+
+        {/* Main Content */}
+        <main className="flex-grow p-6">
+          {!selectedRequest ? (
+            <div className="relative w-full h-[calc(100vh-4rem)] flex flex-col justify-center items-center">
+              <h2 className="text-4xl font-bold text-gray-700 mb-4 text-center">{quote}</h2>
+              <p className="text-lg text-gray-600 text-center">
+                Your work is making the world a better place!
+              </p>
             </div>
           ) : (
-            <div className="relative w-full h-[calc(100vh-4rem)]"> {/* Adjusted height to start after navbar */}
-              {/* Background Image with Overlay */}
-              <div
-                className="absolute top-0 left-0 w-full h-[60vh] bg-cover bg-center"
-                style={{ backgroundImage: "url(/images/counsellor-quote-bg.jpg)" }}
-              >
-                <div className="absolute inset-0 bg-black bg-opacity-40"></div> {/* Dark overlay for contrast */}
+            <div className="bg-white p-6 rounded-xl shadow-lg">
+              <h2 className="text-2xl font-bold text-[#73C7C7] mb-4">Patient Details</h2>
+              <div className="text-gray-700 space-y-2">
+                <p><strong>Name:</strong> {selectedRequest.studentName}</p>
+                <p><strong>Reason for Request:</strong> {selectedRequest.reason}</p>
+                <p><strong>Status:</strong> {selectedRequest.status}</p>
               </div>
 
-              {/* Quote Content */}
-              <div className="relative z-10 text-center max-w-2xl mx-auto pt-20"> {/* Adjusted padding-top */}
-                <p className="text-lg text-white font-medium">Welcome, Counsellor!</p>
-                <h2 className="text-4xl font-bold text-white mb-4">{quote}</h2>
-                <p className="text-lg text-white font-medium">Your work is making the world a better place!</p>
-              </div>
+              {/* Action Buttons */}
+              {selectedRequest.status === "pending" ? (
+                <div className="mt-4 space-x-2">
+                  <button
+                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
+                    onClick={() => handleRequestAction(selectedRequest.id, "accepted")}
+                  >
+                    Accept
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                    onClick={() => handleRequestAction(selectedRequest.id, "declined")}
+                  >
+                    Decline
+                  </button>
+                </div>
+              ) : (
+                <div className="mt-4 space-x-2">
+                  <button
+                    className="bg-[#73C7C7] text-white px-4 py-2 rounded-lg hover:bg-[#5A9A9A] transition"
+                    onClick={() => alert("Chat functionality coming soon!")}
+                  >
+                    Chat
+                  </button>
+                  <button
+                    className="bg-[#F7CFD8] text-white px-4 py-2 rounded-lg hover:bg-[#E6BFC0] transition"
+                    onClick={() => setSchedulingMeeting(true)}
+                  >
+                    Schedule Meeting
+                  </button>
+                </div>
+              )}
+
+              {/* Schedule Meeting Form */}
+              {schedulingMeeting && (
+                <div className="mt-4 bg-[#F4F8D3] p-4 rounded-lg shadow-md">
+                  <h3 className="text-xl font-bold text-[#73C7C7] mb-2">Schedule Meeting</h3>
+                  <div className="space-y-2">
+                    <input
+                      type="date"
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
+                      className="w-full p-2 rounded-lg border border-gray-300"
+                    />
+                    <input
+                      type="time"
+                      value={startTime}
+                      onChange={(e) => setStartTime(e.target.value)}
+                      className="w-full p-2 rounded-lg border border-gray-300"
+                    />
+                    <input
+                      type="time"
+                      value={endTime}
+                      onChange={(e) => setEndTime(e.target.value)}
+                      className="w-full p-2 rounded-lg border border-gray-300"
+                    />
+                  </div>
+                  <div className="mt-4 space-x-2">
+                    <button
+                      className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
+                      onClick={handleScheduleMeeting}
+                    >
+                      Confirm
+                    </button>
+                    <button
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                      onClick={() => setSchedulingMeeting(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </main>
