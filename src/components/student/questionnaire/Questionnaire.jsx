@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { db } from '../../../firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, getDoc, updateDoc, setDoc } from 'firebase/firestore';
 import './Questionnaire.css';
 
 const questions = [
@@ -89,6 +89,7 @@ function Questionnaire() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState('');
+  const [rewardPoints, setRewardPoints] = useState(0);
 
   const handleAnswer = (value) => {
     const newAnswers = { ...answers };
@@ -119,6 +120,7 @@ function Questionnaire() {
     }
     
     try {
+      // Add the questionnaire response
       await addDoc(collection(db, 'responses'), {
         userId,
         answers,
@@ -126,6 +128,31 @@ function Questionnaire() {
         maxPossibleScore: questions.length * 5,
         submittedAt: serverTimestamp()
       });
+      
+      // Update reward points (add 10 points)
+      const coinRef = doc(db, 'coins', userId);
+      
+      // Check if coin document exists
+      const coinDoc = await getDoc(coinRef);
+      
+      if (coinDoc.exists()) {
+        // Coin record exists, update their points
+        const coinData = coinDoc.data();
+        const currentPoints = coinData.rewardPoints || 0;
+        await updateDoc(coinRef, {
+          rewardPoints: currentPoints + 10,
+          lastUpdated: serverTimestamp()
+        });
+        setRewardPoints(currentPoints + 10);
+      } else {
+        // Coin record doesn't exist, create new document
+        await setDoc(coinRef, {
+          rewardPoints: 10,
+          createdAt: serverTimestamp(),
+          lastUpdated: serverTimestamp()
+        });
+        setRewardPoints(10);
+      }
       
       setSubmitted(true);
     } catch (error) {
@@ -147,6 +174,7 @@ function Questionnaire() {
     setAnswers({});
     setSubmitted(false);
     setUserId('');
+    setRewardPoints(0);
   };
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -158,6 +186,10 @@ function Questionnaire() {
       <div className="container questionnaire">
         <h1>Thank You!</h1>
         <p>Your responses have been submitted successfully.</p>
+        <div className="reward-message">
+          <p>You earned <span className="points-highlight">10 reward points</span>!</p>
+          <p>Your current balance: <span className="points-highlight">{rewardPoints} points</span></p>
+        </div>
         <p>We appreciate your participation in our mental health well-being assessment.</p>
         <button className="secondary" onClick={handleReset}>Take Another Assessment</button>
       </div>

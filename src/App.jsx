@@ -46,6 +46,9 @@ import Crisisquiz from './components/student/crisis/Crisisquiz';
 import Helpline from './components/student/professional/Helpline'
 import ContactCounsellor from './components/student/professional/ContactCounsellor'
 
+//feel worthy
+import FeelWorthy from './pages/FeelWorthyIndex'
+
 // Create a client for React Query
 const queryClient = new QueryClient();
 
@@ -58,6 +61,9 @@ function App() {
         <AuthProvider>
         <BrowserRouter>
         <Routes>
+            {/* Feel worthy Routes */}
+            <Route path="/feel-worthy" element={<FeelWorthy />} />
+
             {/* Professional Routes */}
             <Route path="/helpline" element={<Helpline />} />
             <Route path="/contact-counsellor" element={<ContactCounsellor />} />

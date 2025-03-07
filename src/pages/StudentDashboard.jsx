@@ -74,6 +74,10 @@ const StudentDashboard = () => {
     navigate("/contact-counsellor");
   };
 
+  const handleFeelWorthyClick = () => {
+    navigate("/feel-worthy");
+  };
+
   // Toggle dropdown visibility
   const toggleDropdown = (e) => {
     e.stopPropagation(); // Stop event propagation
@@ -169,9 +173,9 @@ const StudentDashboard = () => {
                 { icon: <FaHeart className="text-black" />, text: "Gratitude Journal" },
                 { icon: <FaComments className="text-black" />, text: "Let It Out" },
                 { icon: <FaSmile className="text-black" />, text: "Gratitude Wall" },
-                { icon: <FaHandsHelping className="text-black" />, text: "Feel Worthy" },
+                { icon: <FaHandsHelping className="text-black" />, text: "Feel Worthy", onClick: handleFeelWorthyClick },
               ].map((item, index) => (
-                <DashboardButton key={index} {...item} onClick={() => {}} />
+                <DashboardButton key={index} {...item}  />
               ))}
             </div>
           </div>
