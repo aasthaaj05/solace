@@ -1,0 +1,160 @@
+/* 🎨 Color Palette */
+:root {
+  --soft-pink: #F7CFD8;
+  --light-aqua: #A6F1E0;
+  --warm-yellow: #FFE6A9;
+  --teal-blue: #73C7C7;
+  --pale-yellow-green: #F4F8D3;
+}
+
+/* 🔷 General Styling */
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, 
+  rgba(247, 207, 216, 0.6), /* Soft Pink */
+  rgba(166, 241, 224, 0.6), /* Light Aqua */
+  rgba(255, 230, 169, 0.6), /* Warm Yellow-Orange */
+  rgba(115, 199, 199, 0.6), /* Teal Blue */
+  rgba(244, 248, 211, 0.6)  /* Pale Yellow-Green */
+);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+
+/* 🏠 Chat Container */
+.chat-container {
+  width: 550px;
+  max-width: 1600px; /* Adjusted for larger screens */
+  background: rgba(255, 255, 255, 0.8); /* Subtle translucent white */
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 🏡 Room Selection */
+.room-selection, .avatar-selection {
+  text-align: center;
+  padding: 20px;
+}
+
+.room-buttons, .avatar-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.room-buttons button, .avatar-buttons button {
+  background: var(--teal-blue);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.room-buttons button:hover, .avatar-buttons button:hover {
+  background: var(--light-aqua);
+}
+
+/* 📥 Chat Box */
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+}
+
+.chat-title {
+  background: rgba(255, 183, 197, 0.9); /* Soft pink */
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+  padding: 12px;
+  border-radius: 12px 12px 0 0;
+  font-size: 18px;
+}
+
+/* 💬 Chat Messages */
+.chat-messages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background: rgba(255, 251, 220, 0.8); /* Light warm yellow */
+  border-radius: 0 0 12px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 💬 Message Bubble */
+.message {
+  max-width: 70%;
+  padding: 8px 12px;
+  border-radius: 15px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: black;
+}
+
+.message .avatar {
+  font-size: 20px;
+}
+
+/* Self Messages */
+.message.self {
+  background: var(--light-aqua);
+  align-self: flex-end;
+}
+
+/* Other Messages */
+.message:not(.self) {
+  background: white;
+  align-self: flex-start;
+}
+
+/* 📝 Chat Input */
+.chat-input {
+  display: flex;
+  padding: 10px;
+  background: rgba(244, 248, 211, 0.8);
+  border-radius: 12px;
+  border-top: 1px solid #ddd;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  font-size: 16px;
+  background: white;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.chat-input button {
+  margin-left: 10px;
+  padding: 10px 14px;
+  background: #73C7C7; /* Teal */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.chat-input button:hover {
+  background: #5aa6a6;
+}
+
