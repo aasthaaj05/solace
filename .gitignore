@@ -26,5 +26,7 @@ dist-ssr
 *.sln
 *.sw?
 
+
+
 # Backend folder (ignoring everything inside backend/)
 backend/

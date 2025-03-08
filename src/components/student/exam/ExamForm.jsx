@@ -29,7 +29,7 @@ const ExamForm = ({
       {!isOpen ? (
         <button
           onClick={() => setIsOpen(true)}
-          className="w-full glass-morphism rounded-xl p-4 flex items-center justify-center gap-2 text-sm font-medium transition-all duration-300 hover:shadow-md hover:bg-white/50"
+          className="w-full glass-morphism rounded-xl p-4 flex items-center justify-center gap-2 text-sm font-medium transition-all duration-300 hover:shadow-md hover:bg-white/50 text-gray-800"
         >
           <Plus size={16} />
           <span>Add Exam</span>
@@ -37,7 +37,7 @@ const ExamForm = ({
       ) : (
         <div className="glass-morphism rounded-xl p-5 shadow-sm animate-fade-in">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-medium">Add New Exam</h3>
+            <h3 className="font-medium text-gray-800">Add New Exam</h3>
             <button
               onClick={() => setIsOpen(false)}
               className="p-1 rounded-full hover:bg-black/5 transition-colors"
@@ -48,7 +48,7 @@ const ExamForm = ({
           
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="flex items-center gap-2 text-sm mb-2 text-gray-600">
+              <label className="flex items-center gap-2 text-sm mb-2 text-gray-800">
                 <GraduationCap size={14} />
                 <span>Exam Name</span>
               </label>
@@ -56,7 +56,7 @@ const ExamForm = ({
                 type="text"
                 value={examName}
                 onChange={(e) => setExamName(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-200 bg-white/70 focus:outline-none focus:ring-2 focus:ring-pastel-teal/50 transition-all"
+                className="w-full p-3 rounded-lg border border-gray-200 bg-white/70 focus:outline-none focus:ring-2 focus:ring-pastel-teal/50 transition-all text-gray-800"
                 placeholder="e.g., Mathematics Final"
                 required
               />
@@ -71,14 +71,14 @@ const ExamForm = ({
                 type="date"
                 value={examDate}
                 onChange={(e) => setExamDate(e.target.value)}
-                className="w-full p-3 rounded-lg border border-gray-200 bg-white/70 focus:outline-none focus:ring-2 focus:ring-pastel-teal/50 transition-all"
+                className="w-full p-3 rounded-lg border border-gray-200 bg-white/70 focus:outline-none focus:ring-2 focus:ring-pastel-teal/50 transition-all text-gray-800"
                 required
               />
             </div>
             
             <button
               type="submit"
-              className="w-full py-3 rounded-lg bg-pastel-blue/80 hover:bg-pastel-blue transition-colors text-white font-medium"
+              className="w-full py-3 rounded-lg bg-pastel-blue/80 hover:bg-pastel-blue transition-colors text-gray-800 font-medium"
             >
               Save Exam
             </button>

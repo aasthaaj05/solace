@@ -21,7 +21,7 @@ const ExamTimeline = ({
       
       {sortedExams.length === 0 ? (
         <div className="glass-morphism rounded-xl p-6 text-center">
-          <p className="text-gray-500">Add an exam to get started</p>
+          <p className="text-gray-800">Add an exam to get started</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -37,9 +37,9 @@ const ExamTimeline = ({
                   today ? "border-2 border-pastel-pink" : ""
                 )}
               >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-medium text-balance">{exam.name}</h3>
+                <div className="flex items-start justify-between w-full">
+                <div className="w-full">
+                    <h3 className="font-medium text-balance text-gray-800">{exam.name}</h3>
                     <div className="flex items-center gap-1 text-sm text-gray-600 mt-1">
                       <Clock size={14} />
                       <span>{formatExamDate(exam.date)}</span>
@@ -52,7 +52,7 @@ const ExamTimeline = ({
                       
                       {phase && (
                         <span 
-                          className="text-xs px-2.5 py-1 rounded-full text-gray-700"
+                          className="text-xs px-2.5 py-1 rounded-full text-gray-800"
                           style={{ backgroundColor: `${phase.color}50` }}
                         >
                           {phase.name}
@@ -65,13 +65,13 @@ const ExamTimeline = ({
                     onClick={() => onDeleteExam(exam.id)}
                     className="p-1.5 rounded-full hover:bg-gray-100 transition-colors"
                   >
-                    <X size={14} className="text-gray-400 hover:text-gray-600" />
+                    <X size={14} className="text-gray-800 hover:text-gray-800" />
                   </button>
                 </div>
                 
                 {phase && (
                   <div className="mt-4 pt-4 border-t border-gray-100">
-                    <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                    <div className="flex items-center gap-2 text-xs text-gray-800 mb-2">
                       <div className="flex items-center">
                         <div className="w-3 h-3 rounded-full mr-1" style={{ backgroundColor: phase.color }}></div>
                         <span>{phase.name}</span>
@@ -86,7 +86,7 @@ const ExamTimeline = ({
                           <div 
                             key={index} 
                             className={cn(
-                              "h-1.5 flex-1 rounded-full transition-all",
+                              "h-1.5 flex-1 rounded-full transition-all text-gray-800",
                               p.name === phase.name 
                                 ? "bg-opacity-100" 
                                 : "bg-opacity-30"

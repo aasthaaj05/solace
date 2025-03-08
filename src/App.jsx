@@ -47,6 +47,7 @@ import Crisisquiz from './components/student/crisis/Crisisquiz';
 //professional
 import Helpline from './components/student/professional/Helpline'
 import ContactCounsellor from './components/student/professional/ContactCounsellor'
+import ContactCounsellorForm from './components/student/professional/ContactCounsellorForm'
 
 //feel worthy
 import FeelWorthy from './pages/FeelWorthyIndex'
@@ -96,6 +97,7 @@ function App() {
             {/* Professional Routes */}
             <Route path="/helpline" element={<Helpline />} />
             <Route path="/contact-counsellor" element={<ContactCounsellor />} />
+            <Route path="/contact-counsellor-form" element={<ContactCounsellorForm />} />
 
             {/* Questionnaire Routes */}
             <Route path="/questionnaire" element={<Questionnaire />} />
@@ -152,6 +154,7 @@ function App() {
             {/* Catch-all Route for Unknown Paths */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <Chatbot />
         </BrowserRouter>
         </AuthProvider>
       </TooltipProvider>

@@ -50,22 +50,22 @@ const AffirmationCard = ({
     >
       <div className="flex items-center gap-2 mb-4">
         <div className="p-2 rounded-full" style={{ backgroundColor: `${color}40` }}>
-          <Quote size={16} className="text-gray-700" />
+          <Quote size={16} className="text-gray-800" />
         </div>
-        <h3 className="font-medium text-sm">{phaseName} Message</h3>
+        <h3 className="font-medium text-gray-800">{phaseName} Message</h3>
       </div>
       
-      <p className="text-xl font-light mb-2 text-balance leading-relaxed">
+      <p className="text-xl font-light mb-2 text-balance leading-relaxed text-gray-800">
         "{affirmation.text}"
       </p>
       
       {affirmation.author && (
-        <p className="text-sm text-gray-600 italic mb-4">— {affirmation.author}</p>
+        <p className="text-sm text-gray-800 italic mb-4">— {affirmation.author}</p>
       )}
       
       <button
         onClick={handleNewAffirmation}
-        className="flex items-center gap-2 text-sm mt-2 px-4 py-2 rounded-full transition-colors duration-300 hover:bg-black/5"
+        className="flex items-center gap-2 text-sm mt-2 px-4 py-2 rounded-full transition-colors duration-300 hover:bg-black/5 text-gray-800"
       >
         <Heart size={14} className="text-pastel-pink" />
         <span>New message</span>
