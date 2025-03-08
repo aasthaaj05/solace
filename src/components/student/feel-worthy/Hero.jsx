@@ -39,7 +39,7 @@ const Hero = () => {
           <FadeIn delay={900} duration={800}>
             <button 
               onClick={scrollToAchievements}
-              className="px-8 py-4 rounded-lg bg-feelworthy-teal text-white font-medium 
+              className="px-8 py-4 rounded-lg bg-feelworthy-teal text-green-800 font-medium 
                 shadow-lg shadow-feelworthy-teal/20 transform transition-all 
                 hover:shadow-xl hover:shadow-feelworthy-teal/30 hover:scale-[1.02] 
                 active:scale-[0.98] active:shadow-md">

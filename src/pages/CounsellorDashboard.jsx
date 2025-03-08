@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { collection, getDocs, doc, updateDoc, query, where, addDoc } from "firebase/firestore";
+import { collection, getDocs, doc, updateDoc, query, where, addDoc, deleteDoc } from "firebase/firestore";
 import { db, auth } from "../firebase"; // Adjust the import path as needed
 import { FaBars } from "react-icons/fa";
 import Navbar from "../components/counsellor/Navbar";
+import AnimatedBackground from "../components/AnimatedBackground"; // Import AnimatedBackground
 
 const quotes = [
   "Helping one person might not change the whole world, but it could change the world for one person.",
@@ -58,17 +59,39 @@ const CounsellorDashboard = () => {
   // Handle accepting or declining a request
   const handleRequestAction = async (requestId, action) => {
     try {
-      const requestRef = doc(db, "contactRequests", requestId);
-      await updateDoc(requestRef, {
-        status: action,
-      });
-
-      setRequests((prevRequests) =>
-        prevRequests.map((request) =>
-          request.id === requestId ? { ...request, status: action } : request
-        )
-      );
-
+      if (action === "accepted") {
+        // Update the request status to "accepted"
+        const requestRef = doc(db, "contactRequests", requestId);
+        await updateDoc(requestRef, {
+          status: action,
+        });
+  
+        // Update the UI with smooth transitions
+        setRequests((prevRequests) =>
+          prevRequests.map((request) =>
+            request.id === requestId ? { ...request, status: action } : request
+          )
+        );
+  
+        // If the request is accepted, automatically show chat and schedule meeting options
+        const updatedRequest = requests.find((request) => request.id === requestId);
+        setSelectedRequest(updatedRequest);
+      } else if (action === "declined") {
+        // Delete the request from Firestore
+        const requestRef = doc(db, "contactRequests", requestId);
+        await deleteDoc(requestRef);
+  
+        // Remove the request from the UI
+        setRequests((prevRequests) =>
+          prevRequests.filter((request) => request.id !== requestId)
+        );
+  
+        // Clear the selected request if it was the one declined
+        if (selectedRequest?.id === requestId) {
+          setSelectedRequest(null);
+        }
+      }
+  
       alert(`Request ${action} successfully!`);
     } catch (error) {
       console.error("Error updating request: ", error);
@@ -162,12 +185,22 @@ const CounsellorDashboard = () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F4F8D3]">
-      <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-      <div className="flex flex-grow">
+    <div className="flex flex-col min-h-screen bg-gradient-to-r from-[#F4F8D3] to-[#A6F1E0]">
+      {/* Animated Background */}
+      <div className="absolute inset-0 z-0">
+        <AnimatedBackground />
+      </div>
+
+      {/* Navbar */}
+      <div className="relative z-10">
+        <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+      </div>
+
+      {/* Main Content */}
+      <div className="flex flex-grow relative z-10">
         {/* Sidebar */}
         {sidebarOpen && (
-          <aside className="w-64 bg-[#A6F1E0] shadow-lg p-4 rounded-r-2xl">
+          <aside className="w-64 bg-white/90 backdrop-blur-sm shadow-lg p-4 rounded-r-2xl">
             <h2 className="text-xl font-semibold text-[#73C7C7] mb-3 border-b-2 border-[#73C7C7] pb-1">
               Requests
             </h2>
@@ -175,7 +208,7 @@ const CounsellorDashboard = () => {
               {requests.map((request) => (
                 <li
                   key={request.id}
-                  className={`cursor-pointer px-3 py-2 rounded-lg text-[#5A9A9A] bg-[#F4F8D3] hover:bg-[#F7CFD8] transition ${
+                  className={`cursor-pointer px-3 py-2 rounded-lg text-[#5A9A9A] bg-[#F4F8D3] hover:bg-[#F7CFD8] transition-all duration-300 ${
                     selectedRequest?.id === request.id ? "bg-[#F7CFD8]" : ""
                   }`}
                   onClick={() => setSelectedRequest(request)}
@@ -197,7 +230,7 @@ const CounsellorDashboard = () => {
               </p>
             </div>
           ) : (
-            <div className="bg-white p-6 rounded-xl shadow-lg">
+            <div className="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg">
               <h2 className="text-2xl font-bold text-[#73C7C7] mb-4">Patient Details</h2>
               <div className="text-gray-700 space-y-2">
                 <p><strong>Name:</strong> {selectedRequest.studentName}</p>
@@ -209,13 +242,13 @@ const CounsellorDashboard = () => {
               {selectedRequest.status === "pending" ? (
                 <div className="mt-4 space-x-2">
                   <button
-                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
+                    className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-all duration-300"
                     onClick={() => handleRequestAction(selectedRequest.id, "accepted")}
                   >
                     Accept
                   </button>
                   <button
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-300"
                     onClick={() => handleRequestAction(selectedRequest.id, "declined")}
                   >
                     Decline
@@ -224,13 +257,13 @@ const CounsellorDashboard = () => {
               ) : (
                 <div className="mt-4 space-x-2">
                   <button
-                    className="bg-[#73C7C7] text-white px-4 py-2 rounded-lg hover:bg-[#5A9A9A] transition"
+                    className="bg-[#73C7C7] text-white px-4 py-2 rounded-lg hover:bg-[#5A9A9A] transition-all duration-300"
                     onClick={() => alert("Chat functionality coming soon!")}
                   >
                     Chat
                   </button>
                   <button
-                    className="bg-[#F7CFD8] text-white px-4 py-2 rounded-lg hover:bg-[#E6BFC0] transition"
+                    className="bg-[#F7CFD8] text-white px-4 py-2 rounded-lg hover:bg-[#E6BFC0] transition-all duration-300"
                     onClick={() => setSchedulingMeeting(true)}
                   >
                     Schedule Meeting
@@ -264,13 +297,13 @@ const CounsellorDashboard = () => {
                   </div>
                   <div className="mt-4 space-x-2">
                     <button
-                      className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
+                      className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-all duration-300"
                       onClick={handleScheduleMeeting}
                     >
                       Confirm
                     </button>
                     <button
-                      className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-300"
                       onClick={() => setSchedulingMeeting(false)}
                     >
                       Cancel

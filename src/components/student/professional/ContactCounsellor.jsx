@@ -1,7 +1,26 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../../firebase";
-import { collection, addDoc, getDocs, query, where, doc, updateDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
+import StudNavbar from "../../student/StudNavbar";
+import AnimatedBackground from "../../AnimatedBackground";
+
+// Reusable Card Component
+const Card = ({ children, className = "" }) => (
+  <div className={`bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-white/20 ${className}`}>
+    {children}
+  </div>
+);
+
+// Reusable Button Component
+const Button = ({ children, onClick, className = "" }) => (
+  <button
+    className={`w-full font-semibold px-4 py-2 rounded-lg transition duration-200 ${className}`}
+    onClick={onClick}
+  >
+    {children}
+  </button>
+);
 
 const ContactCounsellor = () => {
   const [selectedIssue, setSelectedIssue] = useState("");
@@ -77,74 +96,86 @@ const ContactCounsellor = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F8D3] flex flex-col items-center justify-center p-6">
-      <h1 className="text-3xl font-bold text-[#73C7C7] mb-8">Contact a Counsellor</h1>
+    <div className="min-h-screen flex flex-col relative bg-gradient-to-r from-[#F7CFD8] to-[#A6F1E0]">
+      {/* Animated Background for the Entire Page */}
+      <div className="absolute inset-0 z-0">
+        <AnimatedBackground />
+      </div>
 
-      {/* Step 1: Select Issue */}
-      {!selectedIssue && (
-        <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-          <h2 className="text-xl font-bold text-[#73C7C7] mb-4">What type of issue are you facing?</h2>
-          <div className="space-y-4">
-            {issues.map((issue, index) => (
-              <button
-                key={index}
-                className="w-full bg-[#E0F2FE] text-black font-semibold px-4 py-2 rounded-lg hover:bg-[#A6F1E0] transition duration-200"
-                onClick={() => handleIssueSelection(issue)}
-              >
-                {issue}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Navbar */}
+      <StudNavbar />
 
-      {/* Step 2: Group or Individual */}
-      {showOptions && !showGroupList && (
-        <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-          <h2 className="text-xl font-bold text-[#73C7C7] mb-4">
-            Some more users wish to avail counselling for similar issues. Do you wish to avail counselling?
-          </h2>
-          <div className="space-y-4">
-            <button
-              className="w-full bg-[#73C7C7] text-white font-semibold px-4 py-2 rounded-lg hover:bg-[#A6F1E0] transition duration-200"
-              onClick={() => handleGroupIndividualSelection("group")}
-            >
-              Group
-            </button>
-            <button
-              className="w-full bg-green-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-green-400 transition duration-200"
-              onClick={() => handleGroupIndividualSelection("individual")}
-            >
-              Individual
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Step 3: Group Member Selection */}
-      {showGroupList && (
-        <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-          <h2 className="text-xl font-bold text-[#73C7C7] mb-4">Select users to form a group:</h2>
-          <div className="space-y-4">
-            {groupMembers.map((user, index) => (
-              <div key={index} className="flex items-center gap-4">
-                <input
-                  type="checkbox"
-                  checked={selectedGroupMembers.includes(user.userId)}
-                  onChange={() => handleGroupMemberSelection(user)}
-                />
-                <span>{user.userName}</span>
+      {/* Main Content */}
+      <div className="relative z-10 flex-1 flex items-center justify-center p-6">
+        <div className="w-full max-w-2xl space-y-6">
+          {/* Step 1: Select Issue */}
+          {!selectedIssue && (
+            <Card>
+              <h2 className="text-2xl font-bold text-[#73C7C7] mb-6">What type of issue are you facing?</h2>
+              <div className="space-y-4">
+                {issues.map((issue, index) => (
+                  <Button
+                    key={index}
+                    onClick={() => handleIssueSelection(issue)}
+                    className="bg-[#A6F1E0] text-black hover:bg-[#73C7C7] hover:text-white"
+                  >
+                    {issue}
+                  </Button>
+                ))}
               </div>
-            ))}
-            <button
-              className="w-full bg-[#73C7C7] text-white font-semibold px-4 py-2 rounded-lg hover:bg-[#A6F1E0] transition duration-200"
-              onClick={handleGroupFormation}
-            >
-              Group with Selected Users
-            </button>
-          </div>
+            </Card>
+          )}
+
+          {/* Step 2: Group or Individual */}
+          {showOptions && !showGroupList && (
+            <Card>
+              <h2 className="text-2xl font-bold text-[#73C7C7] mb-6">
+                Some more users wish to avail counselling for similar issues. Do you wish to avail counselling?
+              </h2>
+              <div className="space-y-4">
+                <Button
+                  onClick={() => handleGroupIndividualSelection("group")}
+                  className="bg-[#73C7C7] text-white hover:bg-[#A6F1E0] hover:text-black"
+                >
+                  Group
+                </Button>
+                <Button
+                  onClick={() => handleGroupIndividualSelection("individual")}
+                  className="bg-[#A6F1E0] text-black hover:bg-[#73C7C7] hover:text-white"
+                >
+                  Individual
+                </Button>
+              </div>
+            </Card>
+          )}
+
+          {/* Step 3: Group Member Selection */}
+          {showGroupList && (
+            <Card>
+              <h2 className="text-2xl font-bold text-[#73C7C7] mb-6">Select users to form a group:</h2>
+              <div className="space-y-4">
+                {groupMembers.map((user, index) => (
+                  <div key={index} className="flex items-center gap-4">
+                    <input
+                      type="checkbox"
+                      checked={selectedGroupMembers.includes(user.userId)}
+                      onChange={() => handleGroupMemberSelection(user)}
+                      className="w-5 h-5 rounded border-[#73C7C7] focus:ring-[#73C7C7]"
+                    />
+                    <span className="text-lg">{user.userName}</span>
+                  </div>
+                ))}
+                <Button
+                  onClick={handleGroupFormation}
+                  className="bg-[#73C7C7] text-white hover:bg-[#A6F1E0] hover:text-black"
+                >
+                  Group with Selected Users
+                </Button>
+              </div>
+            </Card>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

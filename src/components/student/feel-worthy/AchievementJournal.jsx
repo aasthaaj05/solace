@@ -90,7 +90,7 @@ const AchievementJournal = () => {
                       onChange={(e) => setNewAchievement(e.target.value)}
                       placeholder="What did you accomplish today?"
                       className="w-full p-4 rounded-lg border border-slate-200 focus:border-feelworthy-teal 
-                        focus:ring-2 focus:ring-feelworthy-teal/20 outline-none transition-all mb-4"
+                        focus:ring-2 focus:ring-feelworthy-teal/20 outline-none transition-all mb-4 text-gray-800"
                       rows={3}
                     />
                     <div className="flex justify-end gap-3">
@@ -104,7 +104,7 @@ const AchievementJournal = () => {
                       </button>
                       <button 
                         type="submit"
-                        className="px-4 py-2 rounded-lg bg-feelworthy-teal text-white font-medium 
+                        className="px-4 py-2 rounded-lg bg-feelworthy-teal text-gray-800 font-medium 
                           shadow-md shadow-feelworthy-teal/20 hover:shadow-lg transition-all 
                           disabled:opacity-50 disabled:pointer-events-none"
                         disabled={!newAchievement.trim()}
