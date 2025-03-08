@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#F4F8D3]">
-      <h1 className="text-3xl font-bold text-[#73C7C7]">Welcome to Our Platform</h1>
+      <h2 className="text-3xl font-bold text-[#73C7C7]">Welcome to Our Platform</h2>
       <p className="mt-2 text-gray-700">Choose an option to get started:</p>
 
       <div className="mt-6 space-y-4">

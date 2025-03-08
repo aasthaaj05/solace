@@ -58,6 +58,22 @@ const StudentDashboard = () => {
     navigate("/exam-harmony");
   };
 
+  const handleJournalClick = () => {
+    navigate("/journal");
+  };
+
+  const handleLetItOutClick = () => {
+    navigate("/let-it-out");
+  };
+
+  const handleWallClick = () => {
+    navigate("/gratitude-wall");
+  };
+
+  const handleCommunityClick = () => {
+    navigate("/community-chat");
+  };
+
   const handleQuestionnaireClick = () => {
     navigate("/questionnaire");
   };
@@ -110,7 +126,12 @@ const StudentDashboard = () => {
   );
 
   return (
-    <div className="min-h-screen flex flex-col relative">
+    <div
+      className="min-h-screen flex flex-col relative bg-gradient-to-r from-[#F7CFD8] to-[#A6F1E0]"
+      // style={{
+      //   background: "linear-gradient(135deg, #F7CFD8, #F4F8D3, #A6F1E0, #73C7C7)",
+      // }}
+    >
       {/* Animated Background for the Entire Page */}
       <div className="absolute inset-0 z-0">
         <AnimatedBackground />
@@ -121,36 +142,36 @@ const StudentDashboard = () => {
 
       {/* Hero Section */}
       <div
-        className="relative w-full h-[40vh] sm:h-[50vh] md:h-[60vh] bg-cover bg-center flex items-center justify-center"
-        style={{
-          backgroundImage: "url(/images/student-quote-bg.jpg)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        {/* Overlay for better readability */}
-        <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+  className="relative w-full min-h-[40vh] sm:min-h-[50vh] md:min-h-[60vh] bg-cover bg-center flex items-center justify-center"
+  style={{
+    backgroundImage: "url(/images/student-quote-bg.jpg)",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  }}
+>
+  {/* Overlay for better readability */}
+  <div className="absolute inset-0 bg-black bg-opacity-30"></div>
 
-        {/* Welcome Message */}
-        <h1 className="relative z-10 text-2xl sm:text-3xl md:text-4xl text-white font-bold flex items-center gap-2 text-center">
-          Welcome, {user?.displayName || "Student"}!
-        </h1>
+  {/* Welcome Message */}
+  <h1 className="relative z-10 text-2xl sm:text-3xl md:text-4xl text-white font-bold text-center px-4">
+    Welcome, {user?.displayName || "Student"}!
+  </h1>
 
-        {/* Quotes Section */}
-        <div className="absolute bottom-4 sm:bottom-8 left-0 right-0 z-10 text-center text-white px-4">
-          <FaQuoteLeft className="text-3xl sm:text-4xl md:text-5xl mx-auto mb-2 sm:mb-4" />
-          <p className="text-lg sm:text-xl md:text-2xl font-semibold max-w-2xl mx-auto">
-            {currentQuote}
-          </p>
-        </div>
-      </div>
+  {/* Quotes Section */}
+  <div className="absolute bottom-4 sm:bottom-8 left-0 right-0 z-10 text-center text-white px-4">
+    <FaQuoteLeft className="text-3xl sm:text-4xl md:text-5xl mx-auto mb-2 sm:mb-4" />
+    <p className="text-lg sm:text-xl md:text-2xl font-semibold max-w-2xl mx-auto">
+      {currentQuote}
+    </p>
+  </div>
+</div>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col md:flex-row w-full px-4 sm:px-6 md:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8 md:space-y-0 md:space-x-8 relative z-10">
         {/* Left Column */}
         <div className="w-full md:w-1/2 space-y-6 sm:space-y-8">
           {/* Exam Harmony Section */}
-          <div className="bg-white/50 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-lg border border-white/10">
+          <div className="bg-white/80 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-lg border border-white/10">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-black mb-4 sm:mb-6 flex items-center gap-2">
               📚 Exam Harmony
             </h2>
@@ -164,15 +185,15 @@ const StudentDashboard = () => {
           </div>
 
           {/* Self-Care Zone Section */}
-          <div className="bg-white/50 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-lg border border-white/10">
+          <div className="bg-white/80 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-lg border border-white/10">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-black mb-4 sm:mb-6">
               💗 Self-Care Zone
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              {[
-                { icon: <FaHeart className="text-black" />, text: "Gratitude Journal" },
-                { icon: <FaComments className="text-black" />, text: "Let It Out" },
-                { icon: <FaSmile className="text-black" />, text: "Gratitude Wall" },
+            {[
+                { icon: <FaHeart className="text-black" />, text: "Gratitude Journal", onClick: handleJournalClick },
+                { icon: <FaComments className="text-black" />, text: "Let It Out", onClick: handleLetItOutClick },
+                { icon: <FaSmile className="text-black" />, text: "Gratitude Wall", onClick: handleWallClick },
                 { icon: <FaHandsHelping className="text-black" />, text: "Feel Worthy", onClick: handleFeelWorthyClick },
               ].map((item, index) => (
                 <DashboardButton key={index} {...item}  />
@@ -184,7 +205,7 @@ const StudentDashboard = () => {
         {/* Right Column */}
         <div className="w-full md:w-1/2 space-y-6 sm:space-y-8">
           {/* Daily Goals Section */}
-          <div className="bg-white/50 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-lg border border-white/10">
+          <div className="bg-white/80 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-lg border border-white/10">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-black mb-4 sm:mb-6">
               🎯 Daily Goals
             </h2>
@@ -200,7 +221,7 @@ const StudentDashboard = () => {
           </div>
 
           {/* Toolbox Section */}
-          <div className="bg-white/50 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-lg border border-white/10 relative overflow-visible">
+          <div className="bg-white/80 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-lg border border-white/10 relative overflow-visible">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-black mb-4 sm:mb-6">
               🛠️ Toolbox
             </h2>

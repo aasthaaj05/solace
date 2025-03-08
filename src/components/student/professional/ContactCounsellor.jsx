@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, serverTimestamp, doc, getDoc, query, where } from "firebase/firestore";
 import { db, auth } from "../../../firebase"; // Adjust the import path as needed
 import StudNavbar from "../../student/StudNavbar";
 
@@ -8,6 +8,7 @@ const ContactCounsellor = () => {
   const [loading, setLoading] = useState(true); // Manage loading state
   const [student, setStudent] = useState(null); // Store student details
   const [reasons, setReasons] = useState({}); // Store reasons per counsellor
+  const [requestStatuses, setRequestStatuses] = useState({}); // Store request statuses
 
   // Fetch student details from Firestore
   useEffect(() => {
@@ -53,6 +54,35 @@ const ContactCounsellor = () => {
     fetchCounsellors();
   }, []);
 
+  // Fetch request statuses for the logged-in student
+  useEffect(() => {
+    const fetchRequestStatuses = async () => {
+      try {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const contactRequestsCollection = collection(db, "contactRequests");
+        const q = query(
+          contactRequestsCollection,
+          where("studentId", "==", user.uid)
+        );
+
+        const snapshot = await getDocs(q);
+        const statuses = {};
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          statuses[data.counsellorId] = data.status; // Map counsellorId to status
+        });
+
+        setRequestStatuses(statuses);
+      } catch (error) {
+        console.error("Error fetching request statuses: ", error);
+      }
+    };
+
+    fetchRequestStatuses();
+  }, []);
+
   // Handle input change for the reason field
   const handleReasonChange = (counsellorId, value) => {
     setReasons((prev) => ({
@@ -88,6 +118,12 @@ const ContactCounsellor = () => {
         timestamp: serverTimestamp(),
       });
 
+      // Update the request status locally
+      setRequestStatuses((prev) => ({
+        ...prev,
+        [counsellorId]: "pending", // Set status to "pending"
+      }));
+
       // Show a pop-up notification
       alert("Contact request sent!");
 
@@ -99,6 +135,22 @@ const ContactCounsellor = () => {
     } catch (error) {
       console.error("Error sending contact request: ", error);
       alert("Failed to send contact request. Please try again.");
+    }
+  };
+
+  // Get button text and disabled state based on request status
+  const getButtonProps = (counsellorId) => {
+    const status = requestStatuses[counsellorId];
+
+    switch (status) {
+      case "pending":
+        return { text: "Requested", disabled: true };
+      case "accepted":
+        return { text: "Accepted", disabled: true };
+      case "declined":
+        return { text: "Declined", disabled: true };
+      default:
+        return { text: "Contact", disabled: false };
     }
   };
 
@@ -121,40 +173,48 @@ const ContactCounsellor = () => {
           <div className="max-w-3xl mx-auto">
             {counsellors.length > 0 ? (
               <ul className="space-y-6">
-                {counsellors.map((counsellor) => (
-                  <li
-                    key={counsellor.id}
-                    className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
-                  >
-                    <div className="flex flex-col gap-4">
-                      <div>
-                        <h2 className="text-xl sm:text-2xl font-semibold text-[#73C7C7] mb-2">
-                          {counsellor.name}
-                        </h2>
-                        <p className="text-lg sm:text-xl text-gray-800">
-                          Cost per Hour: ${counsellor.costPerHour}
-                        </p>
+                {counsellors.map((counsellor) => {
+                  const { text, disabled } = getButtonProps(counsellor.id);
+
+                  return (
+                    <li
+                      key={counsellor.id}
+                      className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
+                    >
+                      <div className="flex flex-col gap-4">
+                        <div>
+                          <h2 className="text-xl sm:text-2xl font-semibold text-[#73C7C7] mb-2">
+                            {counsellor.name}
+                          </h2>
+                          <p className="text-lg sm:text-xl text-gray-800">
+                            Cost per Hour: ${counsellor.costPerHour}
+                          </p>
+                        </div>
+
+                        {/* Reason Input Field */}
+                        <textarea
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#73C7C7]"
+                          rows="3"
+                          placeholder="Enter your reason for contacting this counsellor..."
+                          value={reasons[counsellor.id] || ""}
+                          onChange={(e) => handleReasonChange(counsellor.id, e.target.value)}
+                          disabled={disabled} // Disable input if request is sent
+                        ></textarea>
+
+                        {/* Contact Button */}
+                        <button
+                          className={`bg-[#73C7C7] text-white px-4 py-2 rounded-lg transition duration-200 ${
+                            disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-[#5AA6A6]"
+                          }`}
+                          onClick={() => handleContactClick(counsellor.id, counsellor.name)}
+                          disabled={disabled} // Disable button if request is sent
+                        >
+                          {text}
+                        </button>
                       </div>
-
-                      {/* Reason Input Field */}
-                      <textarea
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#73C7C7]"
-                        rows="3"
-                        placeholder="Enter your reason for contacting this counsellor..."
-                        value={reasons[counsellor.id] || ""}
-                        onChange={(e) => handleReasonChange(counsellor.id, e.target.value)}
-                      ></textarea>
-
-                      {/* Contact Button */}
-                      <button
-                        className="bg-[#73C7C7] text-white px-4 py-2 rounded-lg hover:bg-[#5AA6A6] transition duration-200"
-                        onClick={() => handleContactClick(counsellor.id, counsellor.name)}
-                      >
-                        Contact
-                      </button>
-                    </div>
-                  </li>
-                ))}
+                    </li>
+                  );
+                })}
               </ul>
             ) : (
               <p className="text-center text-gray-600">No counsellors available.</p>

@@ -1,0 +1,468 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+body {
+    margin: 0;
+    font-family: "Arial", sans-serif;
+    background: linear-gradient(to bottom, #FFDAB9, #FFB6C1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  
+  /* Align Back Button & Title in One Row */
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 0;
+}
+
+/* Back Button Styling */
+.back-button {
+  text-decoration: none;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+  /* App Container */
+  .app-container {
+    text-align: center;
+    width: 100%;
+    max-width: 700px;
+    padding: 20px;
+    position: relative;
+  }
+  
+  /* Title */
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 20px;
+  }
+  
+  /* Calendar Icon */
+  .calendar-container {
+    position: absolute;
+    top: 15px;
+    right: 6px;
+    color: black;
+  }
+  
+  .calendar-icons {
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .calendar-icons:hover {
+    transform: scale(1.1);
+  }
+  
+  .calendar-popup {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    left: auto;
+    transform: translateX(50%);
+    width: 240px;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 10px;
+    z-index: 1000;
+    color: black;
+  }
+  
+  /* Fix calendar header text color */
+.react-calendar__navigation {
+    color: black !important;
+    font-weight: bold;
+  }
+  
+  /* Fix day labels (Mon, Tue, etc.) */
+  .react-calendar__month-view__weekdays {
+    color: black !important;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  /* Fix normal date numbers */
+  .react-calendar__tile {
+    color: black !important;
+    font-weight: 500;
+  }
+  
+  /* Fix Sunday's color */
+  .react-calendar__month-view__days__day--weekend {
+    color: red !important;
+  }
+  
+  /* Selected date styling */
+  .react-calendar__tile--active {
+    background-color: blue !important;
+    color: white !important;
+  }
+  
+  /* Hover effect */
+  .react-calendar__tile:hover {
+    background-color: lightgray !important;
+  }
+
+  /* Ensure the month & year navigation is visible */
+.react-calendar__navigation {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    color: black !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    background-color: white !important;
+    padding: 5px 10px !important;
+  }
+  
+  /* Fix navigation buttons (previous & next arrows) */
+  .react-calendar__navigation button {
+    color: black !important;
+    font-size: 18px !important;
+    font-weight: bold !important;
+    background: none !important;
+    border: none !important;
+    cursor: pointer !important;
+  }
+  
+  /* Fix navigation button hover effect */
+  .react-calendar__navigation button:hover {
+    color: darkgray !important;
+  }
+  
+  /* Journal Container */
+  .journal-container {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
+    margin: auto;
+    opacity: 0.95;
+  }
+
+  .journal-container, input, textarea {
+    border: none;
+    outline: none;
+  }
+  
+  h2 {
+    font-size: 1.4rem;
+    color: #333;
+  }
+  
+  /* Input Fields */
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  textarea {
+    height: 110px;
+    resize: none;
+  }
+
+  .save-button {
+    background: #ff9a9e;
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .save-button:hover {
+    background: #e36d75;
+  }
+  
+  .save-button:disabled {
+    background: gray;
+    cursor: not-allowed;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    body {
+        min-height: 100vh;
+      }
+    .journal-container {
+      width: 85%;
+    }
+  
+    .title {
+      font-size: 1.8rem;
+    }
+  
+    .calendar-icon {
+      font-size: 26px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .title {
+      font-size: 1.5rem;
+    }
+  
+    input, textarea {
+      font-size: 0.9rem;
+      padding: 8px;
+    }
+  
+    .calendar-icon {
+      font-size: 22px;
+    }
+  }
+
+  .marked-date {
+    position: relative;
+  }
+  
+  .marked-date::after {
+    content: "✔"; /* Tick mark */
+    color: green;
+    font-size: 14px;
+    position: absolute;
+    bottom: 2px;
+    right: 5px;
+  }
+  
+  
+
+  /*let it out*/
+
+  .let-it-out-container {
+    width: 90%; /* Adjust width as needed */
+    max-width: 2400px; /* Set a max width for larger screens */
+    margin: 0 auto; /* Center the container */
+    padding: 50px; /* Add spacing */
+    background-color: #F5F5F5;
+border-radius: 16px;
+box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+  
+  /* Navigation buttons */
+  .nav-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+  
+  .nav-button:hover {
+    background: #ddd;
+  }
+  
+  /* Title styling */
+  h1 {
+    font-size: 25px;
+    font-weight: bold;
+    width: 100%;
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Calendar button */
+  .calendar-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 20px;
+    background: white;
+    border: 2px solid #333;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .calendar-icon:hover {
+    background: #ddd;
+  }
+
+  
+  
+  /* DatePicker container */
+  .react-datepicker {
+    position: absolute;
+    top: 0;
+    right: 100%; 
+    z-index: 10;
+    background: white !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: auto !important; 
+  }
+  
+  /* Mode selection buttons */
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .button-container button {
+    width: 200px;
+    padding: 12px;
+    font-size: 18px;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+  
+  /* Text Button */
+  .text-btn {
+    background: linear-gradient(135deg, #4A90E2, #6B9FF3);
+  }
+  
+  .text-btn:hover {
+    background: linear-gradient(135deg, #357ABD, #5A8EEA);
+    transform: scale(1.05);
+  }
+  
+  /* Audio Button */
+  .audio-btn {
+    background: linear-gradient(135deg, #7E57C2, #A078E5);
+  }
+  
+  .audio-btn:hover {
+    background: linear-gradient(135deg, #6A44B1, #8D63D6);
+    transform: scale(1.05);
+  }
+  
+  /* Video Button */
+  .video-btn {
+    background: linear-gradient(135deg, #26A69A, #45BEB0);
+  }
+  
+  .video-btn:hover {
+    background: linear-gradient(135deg, #1F8F87, #3FAEA2);
+    transform: scale(1.05);
+  }
+  
+  /* Text input styling */
+  textarea {
+    
+    font-size: 16px;
+    border: 2px solid #aaa;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  
+  textarea:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  /* Audio & Video Recorder styling */
+  .audio-recorder, .video-recorder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+  }
+  
+  /* Recording buttons */
+  .audio-recorder button, .video-recorder button {
+    background: #28a745;
+    color: white;
+    font-size: 16px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .audio-recorder button:hover, .video-recorder button:hover {
+    background: #218838;
+  }
+  
+  /* Stop Recording Button */
+  .audio-recorder button:nth-child(2),
+  .video-recorder button:nth-child(2) {
+    background: #dc3545;
+  }
+  
+  .audio-recorder button:nth-child(2):hover,
+  .video-recorder button:nth-child(2):hover {
+    background: #c82333;
+  }
+  
+  .audio-recorder p{
+    color: #333;
+  }
+  /* Video preview styling */
+  video {
+    width: 300px;
+    height: 200px;
+    background: black;
+    margin-top: 10px;
+    border-radius: 5px;
+  }
+  
+  /* Saved Note Section */
+  .saved-note {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    margin-top: 20px;
+    width: 80%;
+    color: black;
+  }
+  
+  .saved-note button {
+    margin-top: 10px;
+    background: #ff4444;
+    color: white;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .saved-note button:hover {
+    background: #cc0000;
+  } 
+  

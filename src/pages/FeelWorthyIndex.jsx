@@ -4,6 +4,7 @@ import AchievementJournal from '../components/student/feel-worthy/AchievementJou
 import DailyAffirmation from '../components/student/feel-worthy/DailyAffirmation';
 import GratitudeSpace from '../components/student/feel-worthy/GratitudeSpace';
 import { ChevronUp } from 'lucide-react';
+import AnimatedBackground from '../components/AnimatedBackground';
 
 const FeelWorthyIndex = () => {
   const scrollToTop = () => {
@@ -15,6 +16,9 @@ const FeelWorthyIndex = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <div className="absolute inset-0 z-0">
+        <AnimatedBackground />
+      </div>
       <Hero />
       <AchievementJournal />
       <DailyAffirmation />

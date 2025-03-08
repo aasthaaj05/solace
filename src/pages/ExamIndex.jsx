@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import AnimatedBackground from "../components/student/exam/AnimatedBackground"; 
+import AnimatedBackground from "../components/AnimatedBackground"; 
 import Header from "../components/student/exam/Header";
 import ExamForm from "../components/student/exam/ExamForm";
 import ExamTimeline from "../components/student/exam/ExamTimeline";
@@ -81,7 +81,9 @@ const ExamIndex = () => {
 
   return (
     <div className="min-h-screen w-full pb-12">
-      <AnimatedBackground />
+      <div className="absolute inset-0 z-0">
+        <AnimatedBackground />
+      </div>
       
       <Header />
       

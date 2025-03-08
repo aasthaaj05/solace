@@ -28,6 +28,8 @@ import { TooltipProvider } from "./components/student/exam/ui/tooltip";
 
 // Styles
 import "./index.css";
+import "./indexExam.css"
+
 
 //questionnaire
 import Login1 from './components/student/questionnaire/Login';
@@ -49,6 +51,15 @@ import ContactCounsellor from './components/student/professional/ContactCounsell
 //feel worthy
 import FeelWorthy from './pages/FeelWorthyIndex'
 
+//gamification
+import Journal from './pages/journal'
+import LetItOut from './pages/LetItOut'
+import GratitudeWall from './components/student/wall/GratitudeWall'
+import './pages/styles1.css'
+
+//Community chat
+import ChatApp from "./components/student/community/ChatApp";
+
 // Create a client for React Query
 const queryClient = new QueryClient();
 
@@ -61,6 +72,14 @@ function App() {
         <AuthProvider>
         <BrowserRouter>
         <Routes>
+            {/* Gamification Routes */}
+            <Route path="/journal" element={<Journal />} />
+            <Route path="/let-it-out" element={<LetItOut />} />
+            <Route path="/gratitude-wall" element={<GratitudeWall />} />
+
+            {/* community chat */}
+            <Route path="/community-chat" element={<ChatApp />} />
+
             {/* Feel worthy Routes */}
             <Route path="/feel-worthy" element={<FeelWorthy />} />
 
