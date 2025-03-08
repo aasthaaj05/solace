@@ -60,6 +60,16 @@ import './pages/styles1.css'
 //Community chat
 import ChatApp from "./components/student/community/ChatApp";
 
+// Spinner (NEW)
+import Spinner from "./components/student/spinner/spinner" // Import the Spinner component
+
+//chatbot
+import Chatbot from "./components/student/chatbot/chatbot";
+
+//curated
+import CuratedLanding from "./components/student/curated_spaces/curatedlanding";
+import CuratedSpace from "./components/student/curated_spaces/curated_spaces";
+
 // Create a client for React Query
 const queryClient = new QueryClient();
 
@@ -129,6 +139,15 @@ function App() {
             <Route path="/calendar" element={<CalendarPage />} />
             <Route path="/guided-meditations" element={<GuidedMeditations />} />
             <Route path="/exam-harmony" element={<ExamIndex />} />
+
+            {/* Spinner Route (NEW) */}
+            <Route path="/spinner" element={<Spinner />} />
+
+            {/* Curated */}
+            <Route path="/curated" element={<CuratedLanding />} />
+            <Route path="/curated/:mood" element={<CuratedSpace />} />
+
+
 
             {/* Catch-all Route for Unknown Paths */}
             <Route path="*" element={<NotFound />} />

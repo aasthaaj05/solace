@@ -94,6 +94,14 @@ const StudentDashboard = () => {
     navigate("/feel-worthy");
   };
 
+  const handleCuratedSpacesClick = () => {
+    navigate("/curated");
+  };
+
+  const handleChoreClick = () => {
+    navigate("/spinner");
+  };
+
   // Toggle dropdown visibility
   const toggleDropdown = (e) => {
     e.stopPropagation(); // Stop event propagation
@@ -213,7 +221,7 @@ const StudentDashboard = () => {
               {[
                 { icon: <FaTasks className="text-black" />, text: "Opinion Hub", onClick: handleQuestionnaireClick },
                 { icon: <FaBrain className="text-black" />, text: "Your Perspective", onClick: handleCrisisClick },
-                { icon: <FaRedoAlt className="text-black" />, text: "Chore Roulette" },
+                { icon: <FaRedoAlt className="text-black" />, text: "Spin the Wheel", onClick: handleChoreClick },
               ].map((item, index) => (
                 <DashboardButton key={index} {...item} />
               ))}
@@ -228,7 +236,7 @@ const StudentDashboard = () => {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
               {[
                 { icon: <FaCloud className="text-black" />, text: "Guided Meditation", onClick: handleGuidedMeditationClick },
-                { icon: <FaMusic className="text-black" />, text: "Music", onClick: () => {} },
+                { icon: <FaMusic className="text-black" />, text: "Curated Spaces", onClick: handleCuratedSpacesClick},
                 { icon: <FaUsers className="text-black" />, text: "Community Support", onClick: () => {} },
                 {
                   icon: <FaBriefcase className="text-black" />,
