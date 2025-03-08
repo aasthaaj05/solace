@@ -8,6 +8,9 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const [subPopup, setSubPopup] = useState("");
+  const [thirdPopup, setThirdPopup] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,25 +25,86 @@ const Login = () => {
       const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
       const userId = userCredential.user.uid;
 
+      // Check if the user is a student
       const studentRef = doc(db, "students", userId);
-      const counsellorRef = doc(db, "counsellors", userId);
-
       const studentSnap = await getDoc(studentRef);
+
+      // Check if the user is a counsellor
+      const counsellorRef = doc(db, "counsellors", userId);
       const counsellorSnap = await getDoc(counsellorRef);
 
       if (studentSnap.exists()) {
+        // User is a student
         localStorage.setItem("role", "student");
-        setTimeout(() => navigate("/student-dashboard"), 1000);
+        setShowPopup(true); // Show mood selection popup
       } else if (counsellorSnap.exists()) {
+        // User is a counsellor
         localStorage.setItem("role", "counsellor");
-        setTimeout(() => navigate("/counsellor-dashboard"), 1000);
+        navigate("/counsellor-dashboard"); // Redirect to counsellor dashboard
       } else {
+        // User role not found
         throw new Error("User role not found. Please contact support.");
       }
     } catch (error) {
       setError(error.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleMoodSelection = (mood) => {
+    if (mood === "calm") {
+      navigate("/student-dashboard");
+    } else if (mood === "cheerful") {
+      setSubPopup("cheerful");
+    } else if (mood === "bit_low") {
+      setSubPopup("bit_low");
+    } else if (mood === "super_pumped") {
+      setSubPopup("super_pumped");
+    }
+  };
+
+  const handleBitLowSelection = (response) => {
+    if (response === "yes") {
+      setThirdPopup("yes");
+    } else if (response === "no") {
+      setThirdPopup("no");
+    }
+  };
+
+  const handleSuperPumpedSelection = (option) => {
+    if (option === "spin_the_chore") {
+      navigate("/spinner");
+    } else if (option === "opinion_hub") {
+      navigate("/crisis");
+    }
+  };
+
+  const handleCheerfulSelection = (option) => {
+    if (option === "gratitude_wall") {
+      navigate("/gratitude-wall");
+    } else if (option === "gratitude_journal") {
+      navigate("/journal");
+    } else if (option === "feel_worthy") {
+      navigate("/feel-worthy");
+    }
+  };
+
+  const handleBitLowYesSelection = (option) => {
+    if (option === "community_chat") {
+      navigate("/community-chat");
+    } else if (option === "professional_help") {
+      navigate("/contact-counsellor");
+    }
+  };
+
+  const handleBitLowNoSelection = (option) => {
+    if (option === "let_it_out") {
+      navigate("/let-it-out");
+    } else if (option === "guided_meditation") {
+      navigate("/guided-meditations");
+    } else if (option === "curated_spaces") {
+      navigate("/curated");
     }
   };
 
@@ -96,6 +160,83 @@ const Login = () => {
           </button>
         </div>
       </div>
+
+      {/* Mood Selection Pop-up */}
+      {showPopup && !subPopup && localStorage.getItem("role") === "student" && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-10 rounded-2xl shadow-xl w-[420px] text-center relative">
+            <button className="absolute top-2 right-2 text-gray-400 hover:text-black text-lg" onClick={() => setShowPopup(false)}>✖</button>
+            <h3 className="text-lg font-semibold text-black mb-4">🧐 How's your day going?</h3>
+            <p className="text-sm text-gray-500 mb-6">Pick a mood below:</p>
+
+            <div className="grid grid-cols-2 gap-4">
+              <button className="p-4 rounded-xl bg-[#FFDCDC] hover:bg-[#FFC4C4]" onClick={() => handleMoodSelection("cheerful")}>😊 Cheerful & Bright</button>
+              <button className="p-4 rounded-xl bg-[#FFE6A7] hover:bg-[#FFD37A]" onClick={() => handleMoodSelection("calm")}>😌 Calm & Steady</button>
+              <button className="p-4 rounded-xl bg-[#A7E6FF] hover:bg-[#7FD4FF]" onClick={() => handleMoodSelection("bit_low")}>😔 Feeling A Bit Low</button>
+              <button className="p-4 rounded-xl bg-[#C8F7DC] hover:bg-[#A0EFC2]" onClick={() => handleMoodSelection("super_pumped")}>🤩 Super Pumped</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Second-Level Popups */}
+      {subPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-10 rounded-2xl shadow-xl w-[420px] text-center relative">
+            <button className="absolute top-3 right-3 text-gray-500 hover:text-black text-lg" onClick={() => setSubPopup("")}>✖</button>
+
+            {subPopup === "cheerful" && (
+              <>
+                <h3 className="text-lg font-semibold text-black mb-4">😊 How about...</h3>
+                <div className="grid grid-cols-1 gap-3">
+                  <button className="p-4 w-full rounded-xl bg-[#FFDCDC] hover:bg-[#FFC4C4]" onClick={() => handleCheerfulSelection("gratitude_wall")}>Gratitude Wall</button>
+                  <button className="p-4 w-full rounded-xl bg-[#FFE6A7] hover:bg-[#FFD37A]" onClick={() => handleCheerfulSelection("gratitude_journal")}>Gratitude Journal</button>
+                  <button className="p-4 w-full rounded-xl bg-[#A7E6FF] hover:bg-[#7FD4FF]" onClick={() => handleCheerfulSelection("feel_worthy")}>Feel Worthy</button>
+                </div>
+              </>
+            )}
+
+            {subPopup === "bit_low" && !thirdPopup && (
+              <>
+                <h3 className="text-lg font-semibold text-black mb-4">🤔 Want to talk to someone?</h3>
+                <button className="p-4 w-full rounded-xl bg-[#FFDCDC] hover:bg-[#FFC4C4] mb-2" onClick={() => handleBitLowSelection("yes")}>✅ Yes</button>
+                <button className="p-4 w-full rounded-xl bg-[#A7E6FF] hover:bg-[#7FD4FF]" onClick={() => handleBitLowSelection("no")}>❌ No</button>
+              </>
+            )}
+
+            {thirdPopup === "yes" && (
+              <>
+                <h3 className="text-lg font-semibold text-black mb-4">💬 Who would you like to talk to?</h3>
+                <div className="grid grid-cols-1 gap-3">
+                  <button className="p-4 w-full rounded-xl bg-[#FFDCDC] hover:bg-[#FFC4C4]" onClick={() => handleBitLowYesSelection("community_chat")}>Community Chat</button>
+                  <button className="p-4 w-full rounded-xl bg-[#FFE6A7] hover:bg-[#FFD37A]" onClick={() => handleBitLowYesSelection("/contact-counsellor")}>Contact counsellor</button>
+                </div>
+              </>
+            )}
+
+            {thirdPopup === "no" && (
+              <>
+                <h3 className="text-lg font-semibold text-black mb-4">🎵 What would you like to do?</h3>
+                <div className="grid grid-cols-1 gap-3">
+                  <button className="p-4 w-full rounded-xl bg-[#FFDCDC] hover:bg-[#FFC4C4]" onClick={() => handleBitLowNoSelection("let_it_out")}>Let It Out</button>
+                  <button className="p-4 w-full rounded-xl bg-[#FFE6A7] hover:bg-[#FFD37A]" onClick={() => handleBitLowNoSelection("guided_meditation")}>Guided Meditation</button>
+                  <button className="p-4 w-full rounded-xl bg-[#A7E6FF] hover:bg-[#7FD4FF]" onClick={() => handleBitLowNoSelection("curated_spaces")}>Curated Spaces</button>
+                </div>
+              </>
+            )}
+
+            {subPopup === "super_pumped" && (
+              <>
+                <h3 className="text-lg font-semibold text-black mb-4">🤩 What would you like to do?</h3>
+                <div className="grid grid-cols-1 gap-3">
+                  <button className="p-4 w-full rounded-xl bg-[#FFDCDC] hover:bg-[#FFC4C4]" onClick={() => handleSuperPumpedSelection("spin_the_chore")}>Spin the Chore</button>
+                  <button className="p-4 w-full rounded-xl bg-[#FFE6A7] hover:bg-[#FFD37A]" onClick={() => handleSuperPumpedSelection("opinion_hub")}>Opinion Hub</button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -4,12 +4,14 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase"; 
+import StudNavbar from "../../src/components/student/StudNavbar";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import "./styles.css";
+import "./LetItOut.css";
 
 const auth = getAuth();
 
 function LetItOut() {
+  const [isRecording, setIsRecording] = useState(false);
   const [mode, setMode] = useState(null);
   const [text, setText] = useState("");
   const [savedText, setSavedText] = useState({});
@@ -66,16 +68,93 @@ function LetItOut() {
     }
   };
 
+  const startAudioRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorderRef.current = new MediaRecorder(stream);
+      audioChunks.current = []; // Fix: Use correct ref
+  
+      mediaRecorderRef.current.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunks.current.push(event.data);
+        }
+      };
+  
+      mediaRecorderRef.current.onstop = () => {
+        const audioBlob = new Blob(audioChunks.current, { type: "audio/webm" });
+        const url = URL.createObjectURL(audioBlob);
+        setAudioUrl(url); // Fix: Use correct state setter
+      };
+  
+      mediaRecorderRef.current.start();
+      setIsRecording(true);
+      console.log("Recording started...");
+    } catch (error) {
+      console.error("Error accessing microphone:", error);
+    }
+  };
+  
+  // ✅ Fix `stopAudioRecording`
+  const stopAudioRecording = () => {
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+      console.log("Recording stopped.");
+    }
+  };
+
+  const startVideoRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }); // Include audio
+      videoRef.current.srcObject = stream;
+      videoStreamRef.current = stream;
+  
+      const mediaRecorder = new MediaRecorder(stream, { mimeType: "video/webm" }); // ✅ Correct MIME type
+      videoRecorderRef.current = mediaRecorder;
+      videoChunks.current = []; 
+  
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          videoChunks.current.push(event.data);
+        }
+      };
+  
+      mediaRecorder.onstop = () => {
+        const videoBlob = new Blob(videoChunks.current, { type: "video/webm" });
+        const videoURL = URL.createObjectURL(videoBlob);
+        setVideoUrl(videoURL); // ✅ Correct state update
+        stream.getTracks().forEach((track) => track.stop()); // ✅ Stop camera after recording
+        videoRef.current.srcObject = null; // ✅ Clear video stream
+      };
+  
+      mediaRecorder.start();
+      setIsRecording(true); // ✅ Indicate recording started
+      console.log("Video recording started...");
+    } catch (error) {
+      console.error("Error accessing camera:", error);
+    }
+  };
+  
+  const stopVideoRecording = () => {
+    if (videoRecorderRef.current && videoRecorderRef.current.state !== "inactive") {
+      videoRecorderRef.current.stop();
+      setIsRecording(false); // ✅ Indicate recording stopped
+      console.log("Video recording stopped.");
+    }
+  };
+  
+  
   return (
+    <div className="navbar">
+    <StudNavbar ></StudNavbar>
+    
     <div className="let-it-out-container">
-      <h1>My Safe Space</h1>
-      <Link to="/">
-        <button className="nav-button">Back</button>
-      </Link>
+      <h1 className="title">My Safe Space</h1>
+    
       
       <div className="calendar-container" ref={calendarRef}>
         <button
-          className="calendar-icon"
+          className="calendar-icon back-btn1"
           onClick={() => setShowCalendar(!showCalendar)}
         >
           📅
@@ -117,8 +196,12 @@ function LetItOut() {
 
       {mode === "audio" && (
         <div className="audio-recorder">
-          {recording ? <p>🔴 Recording...</p> : <button onClick={startAudioRecording}>▶ Start Recording</button>}
-          {recording && <button onClick={stopAudioRecording}>⏹ Stop Recording</button>}
+        {isRecording ? (
+  <button onClick={stopAudioRecording}>⏹ Stop Recording</button>
+) : (
+  <button onClick={startAudioRecording}>▶ Start Recording</button>
+)}
+
           {audioUrl && (
             <>
               <audio controls src={audioUrl}></audio>
@@ -129,20 +212,31 @@ function LetItOut() {
         </div>
       )}
 
-      {mode === "video" && (
-        <div className="video-recorder">
-          <video ref={videoRef} autoPlay></video>
-          <button onClick={startVideoRecording}>▶ Start Recording</button>
-          <button onClick={stopVideoRecording}>⏹ Stop Recording</button>
-          {videoUrl && (
-            <>
-              <video controls src={videoUrl}></video>
-              <button onClick={() => handleSave("video")}>Save ✅</button>
-              <button onClick={() => setVideoUrl(null)}>🗑 Delete</button>
-            </>
-          )}
-        </div>
-      )}
+{mode === "video" && (
+  <div className="video-recorder">
+    <video ref={videoRef} autoPlay></video>
+    
+    {isRecording ? (
+      <button onClick={stopVideoRecording}>⏹ Stop Recording</button>
+    ) : (
+      <button onClick={startVideoRecording}>▶ Start Recording</button>
+    )}
+
+    {videoUrl && (
+      <>
+        <video controls src={videoUrl}></video>
+        <button onClick={() => handleSave("video")}>Save ✅</button>
+        <button onClick={() => setVideoUrl(null)}>🗑 Delete</button>
+      </>
+    )}
+  </div>
+)}
+
+
+<Link to="/student-dashboard">
+        <button className="back-btn">Back</button>
+      </Link>
+    </div>
     </div>
   );
 }

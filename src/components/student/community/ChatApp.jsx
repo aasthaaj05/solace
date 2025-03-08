@@ -11,7 +11,7 @@ const ChatApp = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  const chatrooms = ["Friends Corner", "safe Haven", "Soul Space", "Chai Katta"];
+  const chatrooms = ["Friends Corner", "Safe Haven", "Soul Space", "Chai Katta"];
   const avatars = ["🐱", "🐶", "🐼", "🐸"];
 
   useEffect(() => {
@@ -70,7 +70,9 @@ const ChatApp = () => {
           <h2>Choose a Chatroom</h2>
           <div className="room-buttons">
             {chatrooms.map((r) => (
-              <button key={r} onClick={() => joinRoom(r)}>{r}</button>
+              <button key={r} onClick={() => joinRoom(r)}>
+                {r}
+              </button>
             ))}
           </div>
         </div>
@@ -79,15 +81,15 @@ const ChatApp = () => {
           <h2>Select an Avatar</h2>
           <div className="avatar-buttons">
             {avatars.map((a) => (
-              <button key={a} onClick={() => selectAvatar(a)}>{a}</button>
+              <button key={a} onClick={() => selectAvatar(a)}>
+                {a}
+              </button>
             ))}
           </div>
         </div>
       ) : (
         <div className="chat-box">
           <h2 className="chat-title">{room} Chat</h2>
-          
-          {/* Chat Messages */}
           <div className="chat-messages">
             {messages.map((msg, index) => (
               <div key={index} className={`message ${msg.avatar === avatar ? "self" : ""}`}>
@@ -96,8 +98,6 @@ const ChatApp = () => {
               </div>
             ))}
           </div>
-
-          {/* Chat Input */}
           <div className="chat-input">
             <input
               type="text"

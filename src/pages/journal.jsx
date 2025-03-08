@@ -6,7 +6,8 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase"; // Import Firebase configuration
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import "./styles.css";
+import StudNavbar from "../../src/components/student/StudNavbar";
+import "./journal.css";
 
 function App() {
   const [showCalendar, setShowCalendar] = useState(false);
@@ -79,9 +80,11 @@ function App() {
   }, []);
 
   return (
+    <div className="navbar">
+    <StudNavbar ></StudNavbar>
     <div className="app-container">
       {/* Back Button (Top Left Corner) */}
-      <Link to="/" className="back-button">← Back</Link>
+      <Link to="/student-dashboard" className="back-button">← Back</Link>
 
       <h1 className="title">Gratitude Journal</h1>
 
@@ -139,6 +142,7 @@ function App() {
           Save 💾
         </button>
       </div>
+    </div>
     </div>
   );
 }

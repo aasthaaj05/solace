@@ -55,7 +55,7 @@ import FeelWorthy from './pages/FeelWorthyIndex'
 //gamification
 import Journal from './pages/journal'
 import LetItOut from './pages/LetItOut'
-import GratitudeWall from './components/student/wall/GratitudeWall'
+import GratitudeWall from './components/student/letItOut/gratitude_wall'
 import './pages/styles1.css'
 
 //Community chat
