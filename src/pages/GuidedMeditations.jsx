@@ -110,31 +110,31 @@ const GuidedMeditations = () => {
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative w-full h-[60vh] md:h-[70vh] bg-cover bg-center flex items-center justify-center">
+      {/* <div className="relative w-full h-[60vh] md:h-[70vh] bg-cover bg-center flex items-center justify-center"> */}
         {/* Background Image */}
-        <div
+        {/* <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: "url(/images/guided-meditation-bg.jpg)" }}
-        ></div>
+        ></div> */}
 
         {/* Overlay for better readability */}
-        <div className="absolute inset-0 bg-black bg-opacity-70"></div>
+        {/* <div className="absolute inset-0 bg-black bg-opacity-70"></div> */}
 
         {/* Hero Text */}
-        <div className="relative z-10 text-center">
+        {/* <div className="relative z-10 text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
             Mindfulness Sessions
           </h1>
           <p className="text-lg md:text-xl text-white max-w-2xl mx-auto">
             Explore guided meditations to help you relax, focus, and find inner peace.
           </p>
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
 
       {/* Main Content */}
       <div className="flex-grow p-6 md:p-8">
         <h2 className="text-2xl md:text-3xl font-bold text-[#073C7C] mb-6">
-          Featured Meditations
+        Mindfulness Sessions
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Meditation Card 1 */}

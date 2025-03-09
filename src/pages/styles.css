@@ -58,6 +58,7 @@ body {
     top: 15px;
     right: 6px;
     color: black;
+    z-index :1000;
   }
   
   .calendar-icons {
@@ -82,7 +83,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     padding: 10px;
-    z-index: 1000;
+    z-index: 1001;
     color: black;
   }
   
@@ -159,6 +160,7 @@ body {
     max-width: 500px;
     margin: auto;
     opacity: 0.95;
+    z-index: 1;
   }
 
   .journal-container, input, textarea {
@@ -316,9 +318,10 @@ box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   /* DatePicker container */
   .react-datepicker {
     position: absolute;
-    top: 0;
-    right: 100%; 
-    z-index: 10;
+    top: 40px;
+  right: 0; /* Align to the right */
+  left: auto;
+    z-index: 1001;
     background: white !important;
   border: none !important;
   box-shadow: none !important;

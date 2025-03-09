@@ -4,7 +4,10 @@ import { useNavigate } from "react-router-dom";
 import StudNavbar from "../components/student/StudNavbar";
 import AnimatedBackground from "../components/AnimatedBackground";
 import {
-  FaQuoteLeft, FaCalendar, FaTasks, FaBrain, FaRedoAlt, FaHeart, FaComments, FaSmile, FaHandsHelping, FaCloud, FaMusic, FaUsers, FaBriefcase,
+  FaQuoteLeft, FaCalendar, FaTasks, 
+  FaHeart, FaComments, FaCloud, 
+  FaUsers, FaBriefcase, FaChevronDown, 
+  FaBook, FaChartLine, FaSmile, FaGift, FaSpinner
 } from "react-icons/fa";
 
 // Sample quotes for the hero section
@@ -18,15 +21,15 @@ const quotes = [
 const StudentDashboard = () => {
   const [user, setUser] = useState(null);
   const [currentQuote, setCurrentQuote] = useState(quotes[0]);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State for dropdown visibility
+  const [activeTab, setActiveTab] = useState("dashboard");
   const navigate = useNavigate();
 
-  // Change quotes every 5 seconds
+  // Change quotes every 7 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       const randomIndex = Math.floor(Math.random() * quotes.length);
       setCurrentQuote(quotes[randomIndex]);
-    }, 5000);
+    }, 7000);
 
     return () => clearInterval(interval);
   }, []);
@@ -49,92 +52,128 @@ const StudentDashboard = () => {
     return () => unsubscribe();
   }, [navigate]);
 
-  // Navigation handlers
-  const handleGuidedMeditationClick = () => {
-    navigate("/guided-meditations");
+  // Categories with their respective features
+  const categories = {
+    examHarmony: [
+      {
+        id: "exams",
+        title: "Exam Harmony",
+        icon: <FaCalendar size={20} />,
+        description: "Manage exam schedules and reduce stress",
+        path: "/exam-harmony"
+      }
+    ],
+    selfCare: [
+      {
+        id: "feelworthy",
+        title: "Feelworthy",
+        icon: <FaSmile size={20} />,
+        description: "Boost your self-esteem and confidence",
+        path: "/feel-worthy"
+      },
+      {
+        id: "gratitudeJournal",
+        title: "Gratitude Journal",
+        icon: <FaHeart size={20} />,
+        description: "Cultivate gratitude for better wellbeing",
+        path: "/journal"
+      },
+      {
+        id: "letItOut",
+        title: "Let It Out",
+        icon: <FaComments size={20} />,
+        description: "Express your thoughts freely",
+        path: "/let-it-out"
+      },
+      {
+        id: "gratitudeWall",
+        title: "Gratitude Wall",
+        icon: <FaGift size={20} />,
+        description: "Share and read gratitude notes",
+        path: "/gratitude-wall"
+      }
+    ],
+    dailyGoals: [
+      {
+        id: "yourPerspective",
+        title: "Your Perspective",
+        icon: <FaChartLine size={20} />,
+        description: "Reflect on your daily goals and progress",
+        path: "/crisis"
+      },
+      {
+        id: "spinTheWheel",
+        title: "Spin the Wheel",
+        icon: <FaSpinner size={20} />,
+        description: "Randomize your daily tasks for fun",
+        path: "/spinner"
+      }
+    ],
+    toolbox: [
+      {
+        id: "guidedMeditation",
+        title: "Guided Meditation",
+        icon: <FaCloud size={20} />,
+        description: "Find calm with guided sessions",
+        path: "/guided-meditations"
+      },
+      {
+        id: "curatedSpaces",
+        title: "Curated Spaces",
+        icon: <FaBook size={20} />,
+        description: "Explore curated resources for growth",
+        path: "/curated"
+      },
+      {
+        id: "communitySupport",
+        title: "Community Support",
+        icon: <FaUsers size={20} />,
+        description: "Connect with peers for support",
+        path: "/community-chat"
+      },
+      {
+        id: "professionalResources",
+        title: "Professional Resources",
+        icon: <FaBriefcase size={20} />,
+        description: "Access counselors and resources",
+        path: "/helpline", // Default path
+        dropdown: [
+          {
+            id: "contactCounselor",
+            title: "Contact a Counselor",
+            path: "/contact-counsellor" // Path to your existing page
+          },
+          {
+            id: "helpline",
+            title: "Helpline",
+            path: "/helpline" // Existing helpline path
+          }
+        ]
+      }
+    ]
   };
 
-  const handleExamClick = () => {
-    navigate("/exam-harmony");
+  // Navigation handler
+  const navigateTo = (path) => {
+    navigate(path);
   };
 
-  const handleJournalClick = () => {
-    navigate("/journal");
-  };
-
-  const handleLetItOutClick = () => {
-    navigate("/let-it-out");
-  };
-
-  const handleWallClick = () => {
-    navigate("/gratitude-wall");
-  };
-
-  const handleCommunityClick = () => {
-    navigate("/community-chat");
-  };
-
-  const handleCrisisClick = () => {
-    navigate("/crisis");
-  };
-
-  const handleHelplineClick = () => {
-    navigate("/helpline");
-  };
-
-  const handleContactCounsellorClick = () => {
-    navigate("/contact-counsellor");
-  };
-
-  const handleFeelWorthyClick = () => {
-    navigate("/feel-worthy");
-  };
-
-  const handleCuratedSpacesClick = () => {
-    navigate("/curated");
-  };
-
-  const handleChoreClick = () => {
-    navigate("/spinner");
-  };
-
-  // Toggle dropdown visibility
-  const toggleDropdown = (e) => {
-    e.stopPropagation(); // Stop event propagation
-    setIsDropdownOpen((prev) => !prev);
-  };
-
-  // Close dropdown when clicking outside
-  const handleClickOutside = (event) => {
-    if (!event.target.closest(".professional-resources-dropdown")) {
-      setIsDropdownOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
-
-  // Reusable button component
-  const DashboardButton = ({ icon, text, onClick }) => (
-    <button
-      className="bg-[#E0F2FE] text-black font-semibold px-3 sm:px-4 py-2 sm:py-3 rounded-lg shadow-sm hover:shadow-md transition duration-200 flex items-center justify-center gap-2"
-      onClick={onClick}
-    >
-      {icon}
-      <span className="text-xs sm:text-sm">{text}</span>
-    </button>
-  );
+  // Tabs for navigation
+  const tabs = [
+    { id: "dashboard", label: "Dashboard", icon: <FaChartLine className="mr-2" /> },
+    { id: "examHarmony", label: "Exam Harmony", icon: <FaCalendar className="mr-2" /> },
+    { id: "selfCare", label: "Self-Care Zone", icon: <FaHeart className="mr-2" /> },
+    { id: "dailyGoals", label: "Daily Goals", icon: <FaTasks className="mr-2" /> },
+    { id: "toolbox", label: "Toolbox", icon: <FaBriefcase className="mr-2" /> },
+  ];
 
   return (
-    <div
-      className="min-h-screen flex flex-col relative bg-gradient-to-r from-[#F7CFD8] to-[#A6F1E0]"
-    >
-      {/* Animated Background for the Entire Page */}
-      <div className="absolute inset-0 z-0">
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      {/* Subtle background gradient */}
+      <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 z-0"></div>
+      
+      {/* Animated Background with reduced opacity */}
+      <div className="fixed inset-0 z-0 opacity-20">
         <AnimatedBackground />
       </div>
 
@@ -142,125 +181,141 @@ const StudentDashboard = () => {
       <StudNavbar />
 
       {/* Hero Section */}
-      <div
-        className="relative w-full min-h-[40vh] sm:min-h-[50vh] md:min-h-[60vh] bg-cover bg-center flex items-center justify-center"
-        style={{
-          backgroundImage: "url(/images/student-quote-bg.jpg)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        {/* Overlay for better readability */}
-        <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+      <div className="relative w-full h-56 sm:h-64 bg-cover bg-center flex items-center justify-center">
+        {/* Background Image with overlay */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center filter brightness-75"
+          style={{
+            backgroundImage: "url(/images/student-quote-bg.jpg)",
+          }}
+        ></div>
+        <div className="absolute inset-0 bg-black bg-opacity-40 backdrop-filter backdrop-blur-sm"></div>
+        
+        {/* Content */}
+        <div className="relative z-10 px-6 text-center max-w-3xl">
+          <h1 className="text-3xl sm:text-4xl text-white font-bold mb-3">
+            Welcome, {user?.displayName || "Student"}
+          </h1>
+          <div className="flex items-center justify-center text-white">
+            <FaQuoteLeft className="text-xl mr-2 opacity-80" />
+            <p className="text-lg font-medium italic">
+              {currentQuote}
+            </p>
+          </div>
+        </div>
+      </div>
 
-        {/* Welcome Message */}
-        <h1 className="relative z-10 text-2xl sm:text-3xl md:text-4xl text-white font-bold text-center px-4">
-          Welcome, {user?.displayName || "Student"}!
-        </h1>
-
-        {/* Quotes Section */}
-        <div className="absolute bottom-4 sm:bottom-8 left-0 right-0 z-10 text-center text-white px-4">
-          <FaQuoteLeft className="text-3xl sm:text-4xl md:text-5xl mx-auto mb-2 sm:mb-4" />
-          <p className="text-lg sm:text-xl md:text-2xl font-semibold max-w-2xl mx-auto">
-            {currentQuote}
-          </p>
+      {/* Tab Navigation */}
+      <div className="sticky top-0 z-20 bg-white shadow-md">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="flex overflow-x-auto no-scrollbar">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                className={`py-4 px-6 flex items-center whitespace-nowrap transition-colors ${
+                  activeTab === tab.id
+                    ? "text-blue-600 border-b-2 border-blue-600 font-medium"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                {tab.icon}
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col md:flex-row w-full px-4 sm:px-6 md:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8 md:space-y-0 md:space-x-8 relative z-10">
-        {/* Left Column */}
-        <div className="w-full md:w-1/2 space-y-6 sm:space-y-8">
-          {/* Exam Harmony Section */}
-          <div className="bg-white/80 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-lg border border-white/10">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-black mb-4 sm:mb-6 flex items-center gap-2">
-              📚 Exam Harmony
-            </h2>
-            <button
-              className="w-full bg-[#DBEAFE] text-black font-semibold px-4 sm:px-6 py-3 sm:py-4 rounded-lg shadow-md hover:shadow-lg transition duration-200 flex items-center justify-center gap-2"
-              onClick={handleExamClick}
-            >
-              <FaCalendar className="text-lg sm:text-xl" />
-              <span className="text-sm sm:text-lg md:text-xl">Sync your Exams</span>
-            </button>
-          </div>
-
-          {/* Self-Care Zone Section */}
-          <div className="bg-white/80 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-lg border border-white/10">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-black mb-4 sm:mb-6">
-              💗 Self-Care Zone
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 py-8 w-full">
+        {/* Dashboard Stats - Simplified */}
+        {activeTab === "dashboard" && (
+          <>
+            {/* Quick Access Modules */}
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">Quick Access</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
               {[
-                { icon: <FaHeart className="text-black" />, text: "Gratitude Journal", onClick: handleJournalClick },
-                { icon: <FaComments className="text-black" />, text: "Let It Out", onClick: handleLetItOutClick },
-                { icon: <FaSmile className="text-black" />, text: "Gratitude Wall", onClick: handleWallClick },
-                { icon: <FaHandsHelping className="text-black" />, text: "Feel Worthy", onClick: handleFeelWorthyClick },
-              ].map((item, index) => (
-                <DashboardButton key={index} {...item} />
+                categories.examHarmony[0], // Exam Harmony
+                categories.toolbox[1],      // Curated Spaces
+                categories.selfCare[0],     // Feelworthy
+                categories.selfCare[1],     // Gratitude Journal
+                categories.dailyGoals[1],   // Spin the Wheel
+                categories.dailyGoals[0],   // Your Perspective
+              ].map((feature) => (
+                <div 
+                  key={feature.id}
+                  onClick={() => navigateTo(feature.path)}
+                  className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer flex items-center space-x-3"
+                >
+                  <div className="text-blue-600">
+                    {feature.icon}
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-800">{feature.title}</h3>
+                  </div>
+                </div>
               ))}
             </div>
-          </div>
-        </div>
+          </>
+        )}
 
-        {/* Right Column */}
-        <div className="w-full md:w-1/2 space-y-6 sm:space-y-8">
-          {/* Toolbox Section */}
-          <div className="bg-white/80 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-lg border border-white/10 relative overflow-visible">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-black mb-4 sm:mb-6">
-              🛠️ Toolbox
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-              {[
-                { icon: <FaCloud className="text-black" />, text: "Guided Meditation", onClick: handleGuidedMeditationClick },
-                { icon: <FaMusic className="text-black" />, text: "Curated Spaces", onClick: handleCuratedSpacesClick },
-                { icon: <FaUsers className="text-black" />, text: "Community Support", onClick: handleCommunityClick },
-                {
-                  icon: <FaBriefcase className="text-black" />,
-                  text: "Professional Resources",
-                  onClick: toggleDropdown, // Use toggleDropdown here
-                },
-              ].map((item, index) => (
-                <DashboardButton key={index} {...item} />
+        {/* Category Views */}
+        {activeTab !== "dashboard" && categories[activeTab] && (
+          <>
+            <h2 className="text-xl font-semibold text-gray-800 mb-6 capitalize">{activeTab} Resources</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {categories[activeTab].map((feature) => (
+                <div 
+                  key={feature.id}
+                  className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden"
+                >
+                  <div className="p-6">
+                    <div className="flex items-center mb-4">
+                      <div className="bg-blue-100 text-blue-600 p-3 rounded-full mr-4">
+                        {feature.icon}
+                      </div>
+                      <h3 className="font-bold text-lg text-gray-800">{feature.title}</h3>
+                    </div>
+                    <p className="text-gray-600 mb-5">{feature.description}</p>
+
+                    {/* Render dropdown if it exists */}
+                    {feature.dropdown ? (
+                      <div className="relative">
+                        <button
+                          onClick={() => navigateTo(feature.path)}
+                          className="w-full py-2 rounded-lg bg-[#77C7C7] hover:bg-[#5CA9A9] text-white font-medium transition duration-200"
+                        >
+                          Open
+                        </button>
+                        <div className="mt-2">
+                          <select
+                            onChange={(e) => navigateTo(e.target.value)}
+                            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#77C7C7]"
+                          >
+                            <option value={feature.path}>Select an option</option>
+                            {feature.dropdown.map((option) => (
+                              <option key={option.id} value={option.path}>
+                                {option.title}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    ) : (
+                      <button 
+                        onClick={() => navigateTo(feature.path)}
+                        className="w-full py-2 rounded-lg bg-[#77C7C7] hover:bg-[#5CA9A9] text-white font-medium transition duration-200"
+                      >
+                        Open
+                      </button>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
-
-            {/* Professional Resources Dropdown */}
-            {isDropdownOpen && (
-  <div className="absolute z-[2000] bottom-full mb-2 w-40 bg-white rounded-lg shadow-lg professional-resources-dropdown right-0">
-    <ul className="text-gray-700">
-      <li
-        className="px-4 py-2 hover:bg-gray-100 cursor-pointer transition duration-200"
-        onClick={handleHelplineClick}
-      >
-        Helpline Numbers
-      </li>
-      <li
-        className="px-4 py-2 hover:bg-gray-100 cursor-pointer transition duration-200"
-        onClick={handleContactCounsellorClick}
-      >
-        Contact a Counsellor
-      </li>
-    </ul>
-  </div>
-)}
-          </div>
-
-          {/* Daily Goals Section */}
-          <div className="bg-white/80 backdrop-blur-md p-4 sm:p-6 rounded-lg shadow-lg border border-white/10">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-black mb-4 sm:mb-6">
-              🎯 Daily Goals
-            </h2>
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full">
-              {[
-                { icon: <FaBrain className="text-black" />, text: "Your Perspective", onClick: handleCrisisClick },
-                { icon: <FaRedoAlt className="text-black" />, text: "Spin the Wheel", onClick: handleChoreClick },
-              ].map((item, index) => (
-                <DashboardButton key={index} {...item} />
-              ))}
-            </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
     </div>
   );

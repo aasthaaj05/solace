@@ -9,7 +9,7 @@ import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import StudNavbar from "../../src/components/student/StudNavbar";
 import "./journal.css";
 
-function App() {
+function Journal() {
   const [showCalendar, setShowCalendar] = useState(false);
   const [date, setDate] = useState(new Date());
   const calendarRef = useRef(null);
@@ -20,6 +20,12 @@ function App() {
 
   const auth = getAuth(); // Firebase Auth instance
 
+  const closeCalendar = (e) => {
+    if (calendarRef.current && e.target && !calendarRef.current.contains(e.target)) {
+      setShowCalendar(false);
+    }
+  };
+
   useEffect(() => {
     document.addEventListener("click", closeCalendar);
     return () => {
@@ -29,12 +35,6 @@ function App() {
 
   const toggleCalendar = () => {
     setShowCalendar(!showCalendar);
-  };
-
-  const closeCalendar = (e) => {
-    if (calendarRef.current && !calendarRef.current.contains(e.target)) {
-      setShowCalendar(false);
-    }
   };
 
   const handleSave = async () => {
@@ -80,71 +80,69 @@ function App() {
   }, []);
 
   return (
-    <div className="navbar">
-    <StudNavbar ></StudNavbar>
-    <div className="app-container">
-      {/* Back Button (Top Left Corner) */}
-      <Link to="/student-dashboard" className="back-button">← Back</Link>
+    <div className="journal-page">
+      {/* Navbar */}
+      <StudNavbar />
 
-      <h1 className="title">Gratitude Journal</h1>
-
-      {/* Calendar Icon */}
-      <div className="calendar-container" ref={calendarRef}>
-        <FaRegCalendarAlt className="calendar-icons" onClick={toggleCalendar} />
-        {showCalendar && (
-          <DatePicker
-            selected={date}
-            onChange={(selectedDate) => {
-              setDate(selectedDate);
-              const formattedDate = selectedDate.toDateString();
-              if (savedEntries[formattedDate]) {
-                setGratitude(savedEntries[formattedDate].gratitude);
-                setNote(savedEntries[formattedDate].note);
-              } else {
-                setGratitude(["", "", ""]);
-                setNote("");
+      <div className="journal-content">
+        {/* Calendar Icon and Popup */}
+        <div className="calendar-container" ref={calendarRef}>
+          <FaRegCalendarAlt className="calendar-icons" onClick={toggleCalendar} />
+          {showCalendar && (
+            <DatePicker
+              selected={date}
+              onChange={(selectedDate) => {
+                setDate(selectedDate);
+                const formattedDate = selectedDate.toDateString();
+                if (savedEntries[formattedDate]) {
+                  setGratitude(savedEntries[formattedDate].gratitude);
+                  setNote(savedEntries[formattedDate].note);
+                } else {
+                  setGratitude(["", "", ""]);
+                  setNote("");
+                }
+                setShowCalendar(false);
+              }}
+              inline
+              dayClassName={(date) =>
+                calendarMarks[date.toDateString()] ? "marked-date" : null
               }
-              setShowCalendar(false);
-            }}
-            inline
-            dayClassName={(date) =>
-              calendarMarks[date.toDateString()] ? "marked-date" : null
-            }
-          />
-        )}
+              className="react-datepicker"
+            />
+          )}
+        </div>
+
+        <div className="journal-container">
+          <h2>❤️ 3 Things I am Grateful For:</h2>
+          {gratitude.map((item, index) => (
+            <input
+              key={index}
+              type="text"
+              placeholder={`${index + 1}. I am grateful for...`}
+              value={gratitude[index]}
+              onChange={(e) => {
+                const newGratitude = [...gratitude];
+                newGratitude[index] = e.target.value;
+                setGratitude(newGratitude);
+              }}
+            />
+          ))}
+
+          <h2>⭐ Note to Myself ⭐</h2>
+          <textarea
+            placeholder="Write a note to yourself... (Optional)"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+          ></textarea>
+
+          {/* Save Button (Disabled until all 3 gratitude fields are filled) */}
+          <button className="save-button" onClick={handleSave} disabled={!gratitude.every((point) => point.trim() !== "")}>
+            Save 💾
+          </button>
+        </div>
       </div>
-
-      <div className="journal-container">
-        <h2>❤️ 3 Things I am Grateful For:</h2>
-        {gratitude.map((item, index) => (
-          <input
-            key={index}
-            type="text"
-            placeholder={`${index + 1}. I am grateful for...`}
-            value={gratitude[index]}
-            onChange={(e) => {
-              const newGratitude = [...gratitude];
-              newGratitude[index] = e.target.value;
-              setGratitude(newGratitude);
-            }}
-          />
-        ))}
-
-        <h2>⭐ Note to Myself ⭐</h2>
-        <textarea
-          placeholder="Write a note to yourself... (Optional)"
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-        ></textarea>
-
-        {/* Save Button (Disabled until all 3 gratitude fields are filled) */}
-        <button className="save-button" onClick={handleSave} disabled={!gratitude.every((point) => point.trim() !== "")}>
-          Save 💾
-        </button>
-      </div>
-    </div>
     </div>
   );
 }
 
-export default App;
+export default Journal;

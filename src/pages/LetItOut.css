@@ -101,8 +101,8 @@ body {
 /* Calendar Icon */
 .calendar-container {
   position: absolute;
-  top: 15px;
-  right: 6px;
+  top: 5rem;
+  right: 5rem;
   color: rgb(172, 158, 214);
 }
 
@@ -252,6 +252,14 @@ textarea {
 .audio-recorder button{
   background-color: #e39cd9;
   margin: 0.7rem;
+  font-size: 16px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+
 }
 
 .video-btn {
@@ -265,6 +273,13 @@ textarea {
 
 .video-recorder button{
   background-color: #629fe0;
+  font-size: 16px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
 }
 
 /* Saved Note Section */

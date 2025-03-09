@@ -1,197 +1,127 @@
-/* General Styles */
-.app-container {
-    width: 100%;
-    max-width: 800px;
-    padding: 24px;
-    background: linear-gradient(to bottom, white, rgba(252, 178, 195, 0.904)); /* Pastel pink gradient */
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    margin: 0 auto;
-    min-height: 100vh;
-    margin-top: 3rem;
-    margin-bottom: 3rem;
+/* Reset default margins and padding */
+body, html, #root, .journal-page {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+/* Full-screen layout */
+.journal-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f8fafc; /* Light background color */
+}
+
+.journal-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+/* Style the calendar container */
+.calendar-container {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.calendar-icons {
+  cursor: pointer;
+  font-size: 24px;
+  color: #4a5568; /* Dark gray color */
+}
+
+.react-datepicker {
+  font-family: inherit;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.marked-date {
+  background-color: #e2e8f0; /* Light gray for marked dates */
+  border-radius: 50%;
+}
+
+/* Style the journal container */
+.journal-container {
+  width: 100%;
+  max-width: 600px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.journal-container h2 {
+  margin: 16px 0 8px;
+  font-size: 18px;
+  color: #2d3748; /* Dark gray color */
+}
+
+.journal-container input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.journal-container textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 14px;
+  resize: vertical; /* Allow vertical resizing */
+}
+
+.save-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #48bb78; /* Green color */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.save-button:disabled {
+  background-color: #cbd5e0; /* Light gray when disabled */
+  cursor: not-allowed;
+}
+
+.save-button:hover:not(:disabled) {
+  background-color: #38a169; /* Darker green on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .journal-content {
+    padding: 8px;
   }
-  
-  .back-button {
-    position: absolute;
-    top: 24px;
-    left: 24px;
-    font-size: 1rem;
-    color: #4a5568; /* Pastel gray */
-    text-decoration: none;
-    font-weight: 500;
-  }
-  
-  .back-button:hover {
-    color: rgba(255, 182, 193, 1); /* Pastel pink */
-  }
-  
-  .title {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #4a5568; /* Pastel gray */
-    text-align: center;
-    margin-top: 40px;
-  }
-  
-  /* Calendar Styles */
-  .calendar-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 24px;
-  }
-  
-  .calendar-icons {
-    font-size: 24px;
-    color: #4a5568; /* Pastel gray */
-    cursor: pointer;
-    transition: transform 0.2s ease, color 0.2s ease;
-  }
-  
-  .calendar-icons:hover {
-    color: rgba(255, 182, 193, 1); /* Pastel pink */
-    transform: scale(1.1); /* Slight scale effect on hover */
-  }
-  
-  .react-datepicker {
-    border: 1px solid rgba(241, 245, 249, 1);
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .react-datepicker__day--marked {
-    background-color: rgba(255, 209, 220, 0.3); /* Pastel pink */
-    border-radius: 50%;
-  }
-  
-  /* Journal Container Styles */
+
   .journal-container {
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    padding: 12px;
   }
-  
+
   .journal-container h2 {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #4a5568; /* Pastel gray */
-    margin-bottom: 8px;
+    font-size: 16px;
   }
-  
-  .journal-container input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    background: #f8fafc;
-    outline: none;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow for inputs */
-  }
-  
-  .journal-container input:focus {
-    border-color: rgba(255, 182, 193, 1); /* Pastel pink */
-    background: white;
-    box-shadow: 0 0 0 3px rgba(255, 182, 193, 0.2); /* Pastel pink */
-  }
-  
+
+  .journal-container input,
   .journal-container textarea {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    background: #f8fafc;
-    outline: none;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    resize: vertical;
-    min-height: 100px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow for textarea */
+    font-size: 12px;
   }
-  
-  .journal-container textarea:focus {
-    border-color: rgba(255, 182, 193, 1); /* Pastel pink */
-    background: white;
-    box-shadow: 0 0 0 3px rgba(255, 182, 193, 0.2); /* Pastel pink */
-  }
-  
-  /* Save Button Styles */
+
   .save-button {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: none;
-    background: rgba(255, 182, 193, 1); /* Pastel pink */
-    color: white;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for button */
+    font-size: 14px;
   }
-  
-  .save-button:disabled {
-    background: #e2e8f0; /* Light gray */
-    color: #94a3b8; /* Pastel gray */
-    cursor: not-allowed;
-    box-shadow: none; /* No shadow when disabled */
-  }
-  
-  .save-button:hover:not(:disabled) {
-    background: rgba(255, 209, 220, 0.8); /* Lighter pastel pink */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
-  }
-  
-  /* Media Queries for Responsiveness */
-  @media (max-width: 768px) {
-    .app-container {
-      padding: 16px;
-    }
-  
-    .title {
-      font-size: 1.75rem;
-    }
-  
-    .journal-container {
-      padding: 16px;
-    }
-  
-    .journal-container h2 {
-      font-size: 1.125rem;
-    }
-  
-    .journal-container input,
-    .journal-container textarea {
-      font-size: 0.875rem;
-    }
-  
-    .save-button {
-      font-size: 0.875rem;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .title {
-      font-size: 1.5rem;
-    }
-  
-    .journal-container h2 {
-      font-size: 1rem;
-    }
-  
-    .journal-container input,
-    .journal-container textarea {
-      font-size: 0.75rem;
-    }
-  
-    .save-button {
-      font-size: 0.75rem;
-    }
-  }
+}

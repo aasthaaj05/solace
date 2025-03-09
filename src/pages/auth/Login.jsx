@@ -11,6 +11,7 @@ const Login = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [subPopup, setSubPopup] = useState("");
   const [thirdPopup, setThirdPopup] = useState("");
+  const [popupHistory, setPopupHistory] = useState([]); // Track popup history
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -57,18 +58,23 @@ const Login = () => {
       navigate("/student-dashboard");
     } else if (mood === "cheerful") {
       setSubPopup("cheerful");
+      setPopupHistory([...popupHistory, "mood"]); // Add to history
     } else if (mood === "bit_low") {
       setSubPopup("bit_low");
+      setPopupHistory([...popupHistory, "mood"]); // Add to history
     } else if (mood === "super_pumped") {
       setSubPopup("super_pumped");
+      setPopupHistory([...popupHistory, "mood"]); // Add to history
     }
   };
 
   const handleBitLowSelection = (response) => {
     if (response === "yes") {
       setThirdPopup("yes");
+      setPopupHistory([...popupHistory, "bit_low"]); // Add to history
     } else if (response === "no") {
       setThirdPopup("no");
+      setPopupHistory([...popupHistory, "bit_low"]); // Add to history
     }
   };
 
@@ -106,6 +112,23 @@ const Login = () => {
     } else if (option === "curated_spaces") {
       navigate("/curated");
     }
+  };
+
+  const handleBack = () => {
+    if (popupHistory.length > 0) {
+      const lastPopup = popupHistory[popupHistory.length - 1];
+      setPopupHistory(popupHistory.slice(0, -1)); // Remove last entry
+
+      if (lastPopup === "mood") {
+        setSubPopup("");
+      } else if (lastPopup === "bit_low") {
+        setThirdPopup("");
+      }
+    }
+  };
+
+  const handleClose = () => {
+    navigate("/student-dashboard");
   };
 
   return (
@@ -165,7 +188,7 @@ const Login = () => {
       {showPopup && !subPopup && localStorage.getItem("role") === "student" && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-10 rounded-2xl shadow-xl w-[420px] text-center relative">
-            <button className="absolute top-2 right-2 text-gray-400 hover:text-black text-lg" onClick={() => setShowPopup(false)}>✖</button>
+            <button className="absolute top-2 right-2 text-gray-400 hover:text-black text-lg" onClick={handleClose}>✖</button>
             <h3 className="text-lg font-semibold text-black mb-4">🧐 How's your day going?</h3>
             <p className="text-sm text-gray-500 mb-6">Pick a mood below:</p>
 
@@ -183,7 +206,8 @@ const Login = () => {
       {subPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-10 rounded-2xl shadow-xl w-[420px] text-center relative">
-            <button className="absolute top-3 right-3 text-gray-500 hover:text-black text-lg" onClick={() => setSubPopup("")}>✖</button>
+            <button className="absolute top-3 right-3 text-gray-500 hover:text-black text-lg" onClick={handleClose}>✖</button>
+            <button className="absolute top-3 left-3 text-gray-500 hover:text-black text-lg" onClick={handleBack}>⬅ Back</button>
 
             {subPopup === "cheerful" && (
               <>
