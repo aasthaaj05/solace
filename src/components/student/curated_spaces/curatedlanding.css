@@ -1,0 +1,159 @@
+/* General Styles */
+.curated-container1 {
+    text-align: center;
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.curated-container h1 {
+    font-size: 2.75rem;
+    color: #495057;
+    margin-bottom: 30px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+
+/* Search Bar */
+.search-bar {
+    width: 50%;
+    padding: 14px 24px;
+    margin-bottom: 40px;
+    font-size: 1rem;
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+    outline: none;
+    background-color: #ffffff;
+    color: #333;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.search-bar:focus {
+    border-color: #6c757d;
+    box-shadow: 0 0 12px rgba(108, 117, 125, 0.2);
+}
+
+/* Grid Layout */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Mood Card */
+.curated-card {
+    background: linear-gradient(135deg, #f0f7f8, #e6eef0);
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-align: center;
+    border: 1px solid #dee2e6;
+    position: relative;
+    max-width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.curated-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.mood-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    filter: brightness(0.9) contrast(1.1);
+}
+
+.card-content {
+    padding: 20px;
+    color: #333;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-content h3 {
+    font-size: 1.5rem;
+    color: #495057;
+    margin-bottom: 8px;
+    font-weight: 600;
+    letter-spacing: -0.25px;
+}
+
+.mood-description {
+    font-size: 1rem;
+    color: #6c757d;
+    margin: 0;
+    line-height: 1.6;
+    text-align: center;
+}
+
+/* No Results Message */
+.no-results {
+    font-size: 1.2rem;
+    color: #adb5bd;
+    grid-column: span 3;
+    text-align: center;
+    margin-top: 40px;
+    font-weight: 500;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .search-bar {
+        width: 90%;
+    }
+
+    .curated-container h1 {
+        font-size: 2.25rem;
+    }
+}
+
+/* Modern Accents */
+.curated-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #6c757d, #adb5bd);
+    border-radius: 16px 16px 0 0;
+}
+
+.curated-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #b0c4c4, #d6e2e2);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.curated-card:hover::after {
+    opacity: 1;
+}

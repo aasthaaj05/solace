@@ -1,0 +1,239 @@
+/* 🎨 Color Palette */
+:root {
+  --soft-pink: #F7CFD8;
+  --light-aqua: #A6F1E0;
+  --warm-yellow: #FFE6A9;
+  --teal-blue: #73C7C7;
+  --pale-yellow-green: #F4F8D3;
+}
+
+/* 🔷 General Styling */
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, 
+    rgba(247, 207, 216, 0.6), /* Soft Pink */
+    rgba(166, 241, 224, 0.6), /* Light Aqua */
+    rgba(255, 230, 169, 0.6), /* Warm Yellow-Orange */
+    rgba(115, 199, 199, 0.6), /* Teal Blue */
+    rgba(244, 248, 211, 0.6)  /* Pale Yellow-Green */
+  );
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* 🏠 Chat Container */
+.chat-container {
+  width: 550px;
+  max-width: 90%; /* Adjusted for responsiveness */
+  background: rgba(255, 255, 255, 0.8); /* Subtle translucent white */
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
+  overflow: hidden;
+  margin-right:auto;
+  margin-left:auto;
+  margin-top: 3rem;
+}
+
+/* 🏡 Room Selection */
+.room-selection {
+  text-align: center;
+  padding: 20px;
+  width: 100%; /* Ensure it takes full width */
+}
+
+.room-selection h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.room-buttons {
+  display: flex;
+  flex-direction: column; /* Stack buttons vertically */
+  gap: 15px; /* Space between buttons */
+  width: 100%; /* Ensure buttons take full width */
+  align-items: center; /* Center buttons horizontally */
+}
+
+.room-buttons button {
+  background: var(--teal-blue);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 80%; /* Make buttons wider */
+  max-width: 300px; /* Limit button width */
+}
+
+.room-buttons button:hover {
+  background: var(--light-aqua);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 🏡 Avatar Selection */
+.avatar-selection {
+  text-align: center;
+  padding: 20px;
+  width: 100%; /* Ensure it takes full width */
+}
+
+.avatar-selection h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.avatar-buttons {
+  display: flex;
+  flex-wrap: wrap; /* Allow buttons to wrap to the next line */
+  justify-content: center; /* Center buttons horizontally */
+  gap: 15px; /* Space between buttons */
+  width: 100%; /* Ensure buttons take full width */
+}
+
+.avatar-buttons button {
+  background: var(--teal-blue);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 24px; /* Larger font size for avatars */
+  font-weight: 500;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 80px; /* Fixed width for buttons */
+  height: 80px; /* Fixed height for buttons */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-buttons button:hover {
+  background: var(--light-aqua);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 📥 Chat Box */
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  width: 100%; /* Ensure it takes full width */
+  background: rgba(255, 255, 255, 0.9); /* Slightly opaque white background */
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  overflow: hidden;
+}
+
+/* Chat Title */
+.chat-title {
+  background: rgba(255, 183, 197, 0.9); /* Soft pink */
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+  padding: 12px;
+  font-size: 18px;
+  border-bottom: 1px solid #ddd; /* Add a subtle border */
+}
+
+/* 💬 Chat Messages */
+.chat-messages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto; /* Enable scrolling for messages */
+  background: rgba(255, 251, 220, 0.8); /* Light warm yellow */
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Space between messages */
+}
+
+/* 💬 Message Bubble */
+.message {
+  max-width: 70%;
+  padding: 10px 15px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between avatar and text */
+  font-size: 14px;
+  color: black;
+}
+
+/* Avatar in Message */
+.message .avatar {
+  font-size: 24px; /* Larger avatar size */
+}
+
+/* Message Text */
+.message .message-text {
+  background: rgba(255, 255, 255, 0.9); /* White background for text */
+  padding: 8px 12px;
+  border-radius: 10px;
+}
+
+/* Self Messages (Messages sent by the user) */
+.message.self {
+  background: var(--light-aqua);
+  align-self: flex-end; /* Align to the right */
+}
+
+.message.self .message-text {
+  background: rgba(255, 255, 255, 0.9); /* White background for self messages */
+}
+
+/* Other Messages (Messages received from others) */
+.message:not(.self) {
+  background: white;
+  align-self: flex-start; /* Align to the left */
+}
+
+/* 📝 Chat Input */
+.chat-input {
+  display: flex;
+  padding: 10px;
+  background: rgba(244, 248, 211, 0.8); /* Light green background */
+  border-top: 1px solid #ddd; /* Add a subtle border */
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  font-size: 16px;
+  background: white;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1); /* Inner shadow for input */
+}
+
+.chat-input button {
+  margin-left: 10px;
+  padding: 10px 14px;
+  background: #73C7C7; /* Teal */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.chat-input button:hover {
+  background: #5aa6a6; /* Darker teal on hover */
+}

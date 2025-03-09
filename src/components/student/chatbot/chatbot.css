@@ -1,0 +1,117 @@
+/* Chatbot Container */
+.chatbot-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 320px;
+  font-family: "Arial", sans-serif;
+  z-index: 1000;
+}
+
+/* Chatbot Header */
+.chatbot-header {
+  background-color: #73C7C7; /* Teal Blue */
+  color: white;
+  padding: 12px;
+  border-radius: 12px 12px 0 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Chatbot Body */
+.chatbot-body {
+  background: #F4F8D3; /* Light Cream */
+  border: 2px solid #73C7C7; /* Teal Blue */
+  padding: 12px;
+  border-radius: 0 0 12px 12px;
+  max-height: 350px;
+  overflow-y: auto;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Messages */
+.chatbot-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 10px;
+}
+
+/* User Message */
+.user-msg {
+  background: #A6F1E0; /* Light Aqua */
+  color: #333;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 80%;
+  align-self: flex-end;
+  font-size: 14px;
+}
+
+/* Bot Message */
+.bot-msg {
+  background: #F7CFD8; /* Soft Pink */
+  color: #333;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 80%;
+  align-self: flex-start;
+  font-size: 14px;
+}
+
+/* Input Box */
+.chatbot-input {
+  
+  display: flex;
+  margin-top: 10px;
+  background: #b4c8f4; /* Warm Yellow-Orange */
+  border-radius: 8px;
+  padding: 8px;
+  align-items: center;
+}
+
+.chatbot-input input {
+  color:rgb(12, 19, 26);
+  flex: 1;
+  padding: 10px;
+  width: 80%;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  font-size: 14px;
+  background: #fff;
+  outline: #eb9393;
+}
+
+.chatbot-input input::placeholder {
+  color: #888;
+}
+
+.chatbot-input button {
+  padding: 10px 14px;
+  background: #73C7C7; /* Teal Blue */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 8px;
+  font-weight: bold;
+}
+
+.chatbot-input button:hover {
+  background: #5588ad; /* Slightly darker Teal Blue */
+}

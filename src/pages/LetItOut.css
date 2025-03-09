@@ -1,0 +1,345 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  background: linear-gradient(138deg, 
+  #FFDAB9 0%,   /* Soft Peach */
+  #FFB6C1 15%,  /* Light Pink */
+  #F7CFD8 30%,  /* Soft Pink */
+  #A6F1E0 45%,  /* Light Aqua */
+  #FFE6A9 60%,  /* Warm Yellow-Orange */
+  #73C7C7 75%,  /* Teal Blue */
+  #F4F8D3 100%  /* Pale Yellow-Green */
+);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Header Container */
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 0;
+  background: linear-gradient(138deg, 
+  #FFDAB9 0%,   /* Soft Peach */
+  #FFB6C1 15%,  /* Light Pink */
+  #F7CFD8 30%,  /* Soft Pink */
+  #A6F1E0 45%,  /* Light Aqua */
+  #FFE6A9 60%,  /* Warm Yellow-Orange */
+  #73C7C7 75%,  /* Teal Blue */
+  #F4F8D3 100%  /* Pale Yellow-Green */
+);
+
+  border-radius: 8px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+/* Back Button Styling */
+/* Back Button Styling */
+.back-btn {
+  text-decoration: none;
+  color: white; /* Change text color to white */
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #73C7C7; /* Teal Blue */
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px; /* Add margin to move it down */
+}
+
+.back-btn:hover {
+  background-color: #A6F1E0; /* Light Aqua on hover */
+}
+
+.back-btn1 {
+  text-decoration: none;
+  color: white; /* Change text color to white */
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #73C7C7; /* Teal Blue */
+  border: none;
+ 
+}
+
+/* App Container */
+.app-container {
+  text-align: center;
+  width: 100%;
+  max-width: 700px;
+  padding: 20px;
+  position: relative;
+  background-color: #F4F8D3; /* Pale Yellow-Green */
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Title */
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Calendar Icon */
+.calendar-container {
+  position: absolute;
+  top: 5rem;
+  right: 5rem;
+  color: rgb(172, 158, 214);
+}
+
+.calendar-icons {
+  font-size: 30px;
+  cursor: pointer;
+  color: #8b9bce;
+  transition: transform 0.2s ease-in-out;
+}
+
+.calendar-icons:hover {
+  transform: scale(1.1);
+  color: #73C7C7; /* Teal Blue */
+}
+
+/* Calendar Popup */
+.calendar-popup {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  left: auto;
+  transform: translateX(50%);
+  width: 240px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 1000;
+  color: black;
+}
+
+/* Journal Container */
+.journal-container {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 500px;
+  margin: auto;
+  opacity: 0.95;
+}
+
+.journal-container, input, textarea {
+  border: none;
+  outline: none;
+}
+
+h2 {
+  font-size: 1.4rem;
+  color: #333;
+}
+
+/* Input Fields */
+input, textarea {
+  color: #333;
+  width: 100%;
+  padding: 10px;
+  margin: 20px 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: #fceff2; /* Soft Pink */
+}
+
+textarea {
+  height: 110px;
+  resize: none;
+}
+
+/* Save Button */
+.save-button {
+  background: #FFE6A9; /* Warm Yellow-Orange */
+  color: #333;
+  font-size: 16px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+  background-color: #F7CFD8; /* Soft Pink */
+}
+
+.save-button:disabled {
+  background: gray;
+  cursor: not-allowed;
+}
+
+/* Let It Out Container */
+.let-it-out-container {
+  width: 90%;
+  max-width: 1200px; /* Adjusted for better readability */
+  margin: 20px auto;
+  padding: 40px;
+  background: linear-gradient(
+    138deg,
+    rgba(255, 182, 193, 0.1) 20%,  /* Light Pink with 10% opacity */
+    rgba(240, 235, 236, 0.1) 40%,  /* Soft Pink with 10% opacity */
+    rgba(166, 241, 224, 0.1) 60%,  /* Light Aqua with 10% opacity */
+    rgba(255, 230, 169, 0.1) 80%,  /* Warm Yellow-Orange with 10% opacity */
+    rgba(244, 248, 211, 0.1) 100%  /* Pale Yellow-Green with 10% opacity */
+  );
+  background-color: white; /* Base white background */
+  border-radius: 16px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+}
+
+ 
+
+/* Mode Selection Buttons */
+.button-container button {
+  width: 200px;
+  padding: 12px;
+  font-size: 18px;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  background-color: #F7CFD8;
+  cursor: pointer;
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.text-btn {
+  background: linear-gradient(135deg, #e2c94a, #ecbb73);
+}
+
+.text-btn:hover {
+  background: linear-gradient(135deg, #357ABD, #5A8EEA);
+  transform: scale(1.05);
+}
+
+.audio-btn {
+  background: linear-gradient(135deg, #c257b2, #faa3f7);
+}
+
+.audio-btn:hover {
+  background: linear-gradient(135deg, #6A44B1, #8D63D6);
+  transform: scale(1.05);
+}
+
+.audio-recorder button{
+  background-color: #e39cd9;
+  margin: 0.7rem;
+  font-size: 16px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+
+}
+
+.video-btn {
+  background: linear-gradient(135deg, #5973ad, #629fe0);
+}
+
+.video-btn:hover {
+  background: linear-gradient(135deg, #1F8F87, #3FAEA2);
+  transform: scale(1.05);
+}
+
+.video-recorder button{
+  background-color: #629fe0;
+  font-size: 16px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+/* Saved Note Section */
+.saved-note {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  margin-top: 20px;
+  width: 80%;
+  color: black;
+}
+
+.saved-note button {
+  margin-top: 10px;
+  background: #ff4444;
+  color: white;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.saved-note button:hover {
+  background: #cc0000;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  body {
+      min-height: 100vh;
+  }
+
+  .journal-container {
+      width: 85%;
+  }
+
+  .title {
+      font-size: 1.8rem;
+  }
+
+  .calendar-icon {
+      font-size: 26px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+      font-size: 1.5rem;
+  }
+
+  input, textarea {
+      font-size: 0.9rem;
+      padding: 8px;
+      color: #333;
+  }
+
+  .calendar-icon {
+      font-size: 22px;
+  }
+}
