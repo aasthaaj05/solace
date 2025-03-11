@@ -17,7 +17,7 @@ Upon logging in, students are greeted with a pop-up asking, "How are you feeling
 
 Depending on their selected mood, they are presented with tailored features to enhance their experience. Alternatively, students can directly access their full dashboard.
 
-![Student Dashboard](public/login.png)
+![Student Dashboard](public/images/login.png)
 
 ### Exam Harmony
 
@@ -25,58 +25,58 @@ Depending on their selected mood, they are presented with tailored features to e
 - The app provides pre-exam, exam day, and post-exam preparation messages.
 - Helps in structured study planning and stress reduction.
 
-![Exam Harmony](public/exam-harmony.png)
+![Exam Harmony](public/images/exam-harmony.jpeg)
 
 ### Happy Mood Features
 
 - **Gratitude Journal**: Students can write three things they were grateful for in their day.
   
-  ![Gratitude Journal](public/gratitude-journal.png)
+  ![Gratitude Journal](public/images/gratitude-journal.png)
   
 - **Gratitude Wall**: A digital space to add sticky notes, images, or other happy moments.
   
-  ![Gratitude Wall](public/gratitude-wall.png)
+  ![Gratitude Wall](public/images/gratitude-wall.jpeg)
   
 - **Feel Worthy Section**: Encourages students to acknowledge their small achievements, reducing comparison anxiety and boosting confidence.
   
-  ![Feel Worthy](public/feel-worthy.png)
+  ![Feel Worthy](public/images/feel-worthy.jpeg)
 
 ### Sad Mood Features
 
 - **Community Chat**: Students can join discussions with peers facing similar challenges in the form of avatars, keeping their identity anonymous.
 - **AI-Powered Chatbot**: Available 24/7 for mental health support.
 
-  ![Chatbot](public/chatbot.png)
+  ![Chatbot](public/images/chatbot.jpeg)
   
 - **Counselor Support**: Students can book one-on-one or group counseling sessions.
 
   <div align="center">
-    <img src="public/reason.png" width="30%">
-    <img src="public/group-ind.png" width="30%">
-    <img src="public/counsellor-selection.png" width="30%">
+    <img src="public/images/reason.png" width="30%">
+    <img src="public/images/group-ind.png" width="30%">
+    <img src="public/images/counsellor-selection.png" width="30%">
   </div>
 
 - **Let It Out**: A space for diary entries in text, audio, or video formats.
   
-  ![Let It Out](public/let-it-out.png)
+  ![Let It Out](public/images/let-it-out.png)
   
 - **Guided Meditations**: Includes guided meditations, mindfulness exercises, etc.
   
-  ![Meditation](public/meditation.png)
+  ![Meditation](public/images/meditation.png)
   
 - **Curated Spaces**: Sleep music and curated spaces for introspection, with the facility of streaks.
   
-  ![Curated Spaces](public/curated.png)
+  ![Curated Spaces](public/images/curated.png)
 
 ### Energetic Mood Features
 
 - **Spin the Chore Wheel**: A fun way to complete daily chores. Students must complete and upload proof of five tasks, reducing procrastination.
   
-  ![Spin the Chore Wheel](public/spin.png)
+  ![Spin the Chore Wheel](public/images/spin.jpeg)
   
 - **Questionnaire**: A set of fun, situation-based, and mood-evaluating questions to assess the user's stress index. Identifies if the user is in a low or high-risk zone.
   
-  ![Questionnaire](public/questionnaire.png)
+  ![Questionnaire](public/images/questionnaire.png)
 
 ### Reward System
 
@@ -92,6 +92,11 @@ To increase user engagement, students earn coins upon completing tasks such as:
 - Accept or Decline Counseling Requests
 - Schedule Meetings with students
 - One-on-One Calls & Messaging
+<div align="center">
+    <img src="public/images/request-counsellor.png" width="30%">
+    <img src="public/images/schedule-meeting.png" width="30%">
+    <img src="public/images/counsellor-meeting.png" width="30%">
+  </div>
 
 ## Tech Stack
 
