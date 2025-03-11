@@ -103,6 +103,8 @@ To increase user engagement, students earn coins upon completing tasks such as:
 - **Frontend**: ReactJS
 - **Backend**: Flask
 - **Database & Authentication**: Firebase
+- Website link: https://solace-q8l7n26nh-aasthas-projects-6f0b59b0.vercel.app/
+  
 
 ## Future Plans
 
