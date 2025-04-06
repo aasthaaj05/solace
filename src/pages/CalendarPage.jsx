@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import Navbar from "../components/counsellor/Navbar";
 import { db, collection, getDocs, query, where, doc, getDoc } from "../firebase";
 
 const CalendarPage = () => {
@@ -67,7 +68,9 @@ const CalendarPage = () => {
   };
 
   return (
+    
     <div className="bg-[#F4F8D3] min-h-screen flex items-center justify-center px-4 py-8">
+      
       <div className="bg-white shadow-xl rounded-xl p-6 w-full max-w-3xl">
         <h2 className="text-[#73C7C7] text-2xl sm:text-3xl font-bold text-center mb-6">
           Meeting Calendar

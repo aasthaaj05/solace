@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaUserCircle, FaBars, FaCalendarAlt } from "react-icons/fa";
+import { FaUserCircle, FaBars, FaCalendarAlt, FaHome } from "react-icons/fa"; // Added FaHome
 import { useNavigate } from "react-router-dom";
 
 const Navbar = ({ toggleSidebar }) => {
@@ -31,8 +31,14 @@ const Navbar = ({ toggleSidebar }) => {
       {/* Centered SOLACE Text */}
       <h1 className="text-white text-xl font-bold">SOLACE</h1>
 
-      {/* Right Side: Calendar Icon and User Dropdown */}
+      {/* Right Side: Home, Calendar, and User Dropdown */}
       <div className="flex items-center gap-4">
+        {/* Home Icon */}
+        <FaHome
+          className="text-white text-2xl cursor-pointer hover:text-[#F4F8D3] transition duration-200"
+          onClick={() => navigate("/counsellor-dashboard")}
+        />
+
         {/* Calendar Icon */}
         <FaCalendarAlt
           className="text-white text-2xl cursor-pointer hover:text-[#F4F8D3] transition duration-200"
