@@ -5,9 +5,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase"; // Import Firebase configuration
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, collection, addDoc, serverTimestamp } from "firebase/firestore";
 import StudNavbar from "../../src/components/student/StudNavbar";
 import "./journal.css";
+import detectEmotions from "../utils/emotionDetector";
 
 function Journal() {
   const [showCalendar, setShowCalendar] = useState(false);
@@ -68,6 +69,27 @@ function Journal() {
         } catch (error) {
           console.error("Error updating coins:", error);
         }
+        // 🧠 Detect mood
+      const fullText = [...gratitude, note].join(" ");
+      const moodDetected = detectEmotions(fullText);
+      console.log("Mood detected:", moodDetected);
+       // 📘 Save journal entry with mood
+      const journalRef = collection(db, "students", userId, "journals");
+      try {
+        const journalRef = collection(db, "students", userId, "journals");
+
+        await addDoc(journalRef, {
+          gratitude,
+          note,
+          moodDetected: detectEmotions(gratitude.join(" ") + " " + note),
+          date: formattedDate,
+          timestamp: serverTimestamp()
+        });
+      
+        console.log("Journal entry with mood saved!");
+      } catch (error) {
+        console.error("Error saving journal entry:", error);
+      }
       }
     }
   };
