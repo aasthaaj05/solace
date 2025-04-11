@@ -183,16 +183,17 @@ function Questionnaire() {
 
   if (submitted) {
     return (
-      <div className="container questionnaire">
-        <h1>Thank You!</h1>
-        <p>Your responses have been submitted successfully.</p>
-        <div className="reward-message">
-          <p>You earned <span className="points-highlight">10 reward points</span>!</p>
-          <p>Your current balance: <span className="points-highlight">{rewardPoints} points</span></p>
+      <div className="container-questionnaire">
+      {submitted ? (
+        <div className="thank-you-message">
+          <h2>Thank You for Your Submission! 🎉</h2>
+          <p>You've earned <span className="points-highlight">{rewardPoints} points</span> for your response.</p>
+          <button className="secondary" onClick={handleReset}>Take Another Survey</button>
         </div>
-        <p>We appreciate your participation in our mental health well-being assessment.</p>
-        <button className="secondary" onClick={handleReset}>Take Another Assessment</button>
-      </div>
+      ) : (
+        <button className="secondary1" onClick={handleSubmit}>Submit</button>
+      )}
+    </div>
     );
   }
 
@@ -240,7 +241,7 @@ function Questionnaire() {
               placeholder="Your ID"
               required
             />
-            <button 
+            <button className="back-btn secondary"
               onClick={handleSubmit} 
               disabled={loading || !userId.trim()}
             >
