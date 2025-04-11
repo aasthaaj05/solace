@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { db, auth } from '../../../firebase';
 import { collection, addDoc, serverTimestamp, doc, getDoc, updateDoc, setDoc } from 'firebase/firestore';
 import './Crisisquiz.css';
+import StudNavbar from "../StudNavbar";
+
 
 const questions = [
     {
@@ -172,6 +174,11 @@ function Crisisquiz() {
 
     if (submitted) {
         return (
+            <>
+
+
+            {/* Navbar */}
+            <StudNavbar />
             <div className="container questionnaire">
                 <h1>Thank You!</h1>
                 <p>Your responses have been submitted successfully.</p>
@@ -181,6 +188,7 @@ function Crisisquiz() {
                 </div>
                 <button className="secondary" onClick={handleReset}>Take Another Assessment</button>
             </div>
+            </>
         );
     }
 
@@ -189,6 +197,12 @@ function Crisisquiz() {
     const hasAnsweredAllQuestions = Object.keys(answers).length === questions.length;
 
     return (
+        <>
+
+
+         {/* Navbar */}
+         <StudNavbar />
+
         <div className="container">
          
             <div className="questionnaire">
@@ -233,6 +247,7 @@ function Crisisquiz() {
                 </div>
             </div>
         </div>
+        </>
     );
 }
 
