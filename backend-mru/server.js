@@ -14,17 +14,25 @@ const io = new Server(server, {
   },
 });
 
-const chatrooms = {}; // Stores users by chatroom
+const chatrooms = {}; // { roomName: [{ id, avatar }] }
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
 
   socket.on("join_room", ({ room, avatar }) => {
     socket.join(room);
+    socket.room = room;
+    socket.avatar = avatar;
+
     if (!chatrooms[room]) chatrooms[room] = [];
     chatrooms[room].push({ id: socket.id, avatar });
 
+    // Notify all clients in the room that a user joined
     io.to(room).emit("user_joined", { avatar, message: "joined the chat!" });
+
+    // Send the updated list of users in the room
+    const onlineUsers = chatrooms[room].map(user => user.avatar);
+    io.to(room).emit("room_users", onlineUsers);
   });
 
   socket.on("chat_message", ({ room, avatar, message }) => {
@@ -32,9 +40,19 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    for (const room in chatrooms) {
-      chatrooms[room] = chatrooms[room].filter((user) => user.id !== socket.id);
+    const { room, avatar } = socket;
+    if (room && chatrooms[room]) {
+      // Remove user from room
+      chatrooms[room] = chatrooms[room].filter(user => user.id !== socket.id);
+
+      // Update the user list for everyone still in the room
+      const onlineUsers = chatrooms[room].map(user => user.avatar);
+      io.to(room).emit("room_users", onlineUsers);
+
+      // Notify others in the room
+      io.to(room).emit("user_left", { avatar, message: "left the chat." });
     }
+
     console.log("A user disconnected:", socket.id);
   });
 });
