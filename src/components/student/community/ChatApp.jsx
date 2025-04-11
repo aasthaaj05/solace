@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import { openDB } from "idb";
-import "./styles.css";
+import "./styles.css"; // Import CSS file for styling
 
 const socket = io("http://localhost:5000");
 
@@ -10,20 +10,16 @@ const ChatApp = () => {
   const [avatar, setAvatar] = useState(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [onlineUsers, setOnlineUsers] = useState([]); // 🌟 New state
 
-  const chatrooms = ["Peaceful Pause", "Safe Haven", "Soul Space", "Hype Hub"];
+  const chatrooms = ["Friends Corner", "Safe Haven", "Soul Space", "Chai Katta"];
   const avatars = ["🐱", "🐶", "🐼", "🐸"];
 
-  // Load messages from IndexedDB when a room is joined
   useEffect(() => {
     const fetchMessages = async () => {
       if (room) {
         const db = await openDB("chatDB", 1, {
           upgrade(db) {
-            if (!db.objectStoreNames.contains("messages")) {
-              db.createObjectStore("messages", { keyPath: "id", autoIncrement: true });
-            }
+            db.createObjectStore("messages", { keyPath: "id", autoIncrement: true });
           },
         });
 
@@ -57,40 +53,13 @@ const ChatApp = () => {
     }
   };
 
-  // Handle incoming messages & room updates
   useEffect(() => {
-    const handleMessage = (data) => {
+    socket.on("chat_message", (data) => {
       setMessages((prev) => [...prev, data]);
-    };
-
-    const handleRoomUsers = (users) => {
-      setOnlineUsers(users); // 🌟 Update user list
-    };
-
-    const handleUserJoined = (data) => {
-      setMessages((prev) => [
-        ...prev,
-        { avatar: data.avatar, message: data.message, system: true },
-      ]);
-    };
-
-    const handleUserLeft = (data) => {
-      setMessages((prev) => [
-        ...prev,
-        { avatar: data.avatar, message: data.message, system: true },
-      ]);
-    };
-
-    socket.on("chat_message", handleMessage);
-    socket.on("room_users", handleRoomUsers);
-    socket.on("user_joined", handleUserJoined);
-    socket.on("user_left", handleUserLeft);
+    });
 
     return () => {
-      socket.off("chat_message", handleMessage);
-      socket.off("room_users", handleRoomUsers);
-      socket.off("user_joined", handleUserJoined);
-      socket.off("user_left", handleUserLeft);
+      socket.off("chat_message");
     };
   }, []);
 
@@ -121,35 +90,14 @@ const ChatApp = () => {
       ) : (
         <div className="chat-box">
           <h2 className="chat-title">{room} Chat</h2>
-
-          {/* 🌟 Online Users Display */}
-          <div className="online-users">
-            <h4>Online:</h4>
-            <div className="user-list">
-              {onlineUsers.map((user, index) => (
-                <span
-                  key={index}
-                  className={`online-avatar ${user === avatar ? "you" : ""}`}
-                  title={user === avatar ? "You" : ""}
-                >
-                  {user}
-                </span>
-              ))}
-            </div>
-          </div>
-
           <div className="chat-messages">
             {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`message ${msg.system ? "system" : msg.avatar === avatar ? "self" : ""}`}
-              >
-                {!msg.system && <span className="avatar">{msg.avatar}</span>}
+              <div key={index} className={`message ${msg.avatar === avatar ? "self" : ""}`}>
+                <span className="avatar">{msg.avatar}</span>
                 <span className="message-text">{msg.message}</span>
               </div>
             ))}
           </div>
-
           <div className="chat-input">
             <input
               type="text"
