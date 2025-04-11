@@ -36,7 +36,6 @@ body::before {
   width: 100%;
   height: 100%;
   z-index: -1; /* Place it behind other content */
-  
   background-size: 100px 100px; /* Controls the repetition size */
   background-repeat: repeat; /* Ensures the gradient repeats */
  

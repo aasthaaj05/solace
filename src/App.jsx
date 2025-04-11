@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
+import React, { useState } from "react";
+import AvatarAssistant from "./components/student/AvatarAssistant"; 
 // Auth Pages
 import Login from "./pages/auth/Login";
 import StudentSignup from "./pages/auth/StudentSignup";
@@ -73,10 +74,13 @@ import CuratedSpace from "./components/student/curated_spaces/curated_spaces";
 // Animated Background
 import AnimatedBackground from "./components/AnimatedBackground"; // Import the AnimatedBackground component
 
+
+
 // Create a client for React Query
 const queryClient = new QueryClient();
 
 function App() {
+  const [assistantMessage] = useState("Welcome back! How are you feeling today?");
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -86,12 +90,14 @@ function App() {
           <BrowserRouter>
             {/* Add the AnimatedBackground here */}
             <AnimatedBackground />
+             
+
             <Routes>
               {/* Gamification Routes */}
               <Route path="/journal" element={<Journal />} />
               <Route path="/let-it-out" element={<LetItOut />} />
               <Route path="/gratitude-wall" element={<GratitudeWall />} />
-
+s
               {/* Community Chat */}
               <Route path="/community-chat" element={<ChatApp />} />
 
@@ -157,11 +163,13 @@ function App() {
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Chatbot />
+            <AvatarAssistant message={assistantMessage} />
           </BrowserRouter>
         </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
 }
+
 
 export default App;
