@@ -2,58 +2,93 @@ import { useState, useEffect, useRef } from "react";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import { getAuth } from "firebase/auth";
-import { db } from "../../../firebase"; // Import Firebase configuration
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { db } from "../../../firebase";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  collection,
+  addDoc,
+  deleteDoc,
+  onSnapshot
+} from "firebase/firestore";
+
 import StickyNote from "./StickyNote";
 import NoteForm from "./NoteForm";
 
 const GratitudeWall = () => {
-  const [notes, setNotes] = useState(() => JSON.parse(localStorage.getItem("notes")) || []);
+  const [notes, setNotes] = useState([]);
   const [coins, setCoins] = useState(0);
   const wallRef = useRef(null);
+  const auth = getAuth();
+  const user = auth.currentUser;
 
-  // 🪙 Fetch coins when the component mounts
+  // Fetch coins from Firestore
   useEffect(() => {
+    if (!user) return;
+
     const fetchCoins = async () => {
-      const userRef = doc(db, "coins", "userId"); // Replace with dynamic user ID
+      const userRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(userRef);
 
       if (docSnap.exists()) {
         setCoins(docSnap.data().coins || 0);
       } else {
-        await setDoc(userRef, { coins: 0 }); // Initialize if not present
+        await setDoc(userRef, { coins: 0 });
       }
     };
 
     fetchCoins();
-  }, []);
+  }, [user]);
 
-  // 📝 Save notes to localStorage whenever they change
+  // Fetch notes from Firestore in real-time
   useEffect(() => {
-    localStorage.setItem("notes", JSON.stringify(notes));
-  }, [notes]);
+    if (!user) return;
 
-  // ➕ Add Coins & Note
+    const notesRef = collection(db, "users", user.uid, "gratitudeNotes");
+    const unsubscribe = onSnapshot(notesRef, (snapshot) => {
+      const fetchedNotes = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setNotes(fetchedNotes);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
+  // Add note and update coins
   const addNote = async (newNote) => {
-    setNotes([...notes, newNote]);
+    if (!user) return;
 
-    const userRef = doc(db, "users", "userId"); // Replace dynamically
     try {
+      const noteRef = collection(db, "users", user.uid, "gratitudeNotes");
+      await addDoc(noteRef, {
+        ...newNote,
+        timestamp: new Date(),
+      });
+
+      const userRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(userRef);
-      const currentCoins = docSnap.exists() ? docSnap.data().coins : 0;
+      const currentCoins = docSnap.exists() ? docSnap.data().coins || 0 : 0;
       await updateDoc(userRef, { coins: currentCoins + 5 });
       setCoins(currentCoins + 5);
     } catch (error) {
-      console.error("Error updating coins:", error);
+      console.error("Error adding note:", error);
     }
   };
 
-  // ❌ Delete Note
-  const deleteNote = (index) => {
-    setNotes(notes.filter((_, i) => i !== index));
+  // Delete note from Firestore
+  const deleteNote = async (noteId) => {
+    if (!user) return;
+
+    try {
+      const noteRef = doc(db, "users", user.uid, "gratitudeNotes", noteId);
+      await deleteDoc(noteRef);
+    } catch (error) {
+      console.error("Error deleting note:", error);
+    }
   };
 
-  // 📸 Export Functions
+  // Export wall as image
   const exportAsImage = () => {
     html2canvas(wallRef.current, { scale: 2 }).then((canvas) => {
       const link = document.createElement("a");
@@ -63,22 +98,36 @@ const GratitudeWall = () => {
     });
   };
 
+  // Export wall as PDF
   const exportAsPDF = () => {
     html2canvas(wallRef.current, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
-      pdf.addImage(imgData, "PNG", 0, 0, pdf.internal.pageSize.getWidth(), (canvas.height * pdf.internal.pageSize.getWidth()) / canvas.width);
+      pdf.addImage(
+        imgData,
+        "PNG",
+        0,
+        0,
+        pdf.internal.pageSize.getWidth(),
+        (canvas.height * pdf.internal.pageSize.getWidth()) / canvas.width
+      );
       pdf.save("gratitude-wall.pdf");
     });
   };
 
   return (
     <div className="container">
-      <h1>Gratitude Wall</h1>
+      <h1>Gratitude Wall 💛</h1>
+      <p>Coins: {coins}</p>
       <NoteForm addNote={addNote} />
       <div className="gratitude-wall" ref={wallRef}>
         {notes.map((note, index) => (
-          <StickyNote key={index} index={index} note={note} onDelete={deleteNote} />
+          <StickyNote
+            key={note.id}
+            index={index}
+            note={note}
+            onDelete={() => deleteNote(note.id)}
+          />
         ))}
       </div>
       <div className="button-container">

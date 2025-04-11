@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { FaUserCircle, FaHome, FaBars } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "../../firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { auth, db } from "../../firebase"; // Ensure correct import
+import { onAuthStateChanged } from "firebase/auth"; // Listen for user changes
+import AvatarAssistant from "./AvatarAssistant"; // Adjust path if needed
+
 
 const StudNavbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
