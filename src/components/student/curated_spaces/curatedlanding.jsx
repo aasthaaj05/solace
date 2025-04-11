@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./curatedlanding.css";
+import StudNavbar from "../StudNavbar";
 
 const moods = [
   { key: "focus", label: "Focus Mode", description: "Lo-fi, Instrumental", image: "/images/focus.jpeg" },
@@ -26,6 +27,10 @@ const CuratedLanding = () => {
   );
 
   return (
+    <>
+     {/* Navbar */}
+     <StudNavbar />
+   
     <div className="curated-container1">
       <h1>🎵 Find Your Mood Space 🎵</h1>
 
@@ -57,6 +62,7 @@ const CuratedLanding = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 
