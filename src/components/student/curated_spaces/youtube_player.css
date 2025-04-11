@@ -1,0 +1,35 @@
+/* Full screen layout */
+/* 
+  /* Flex container for Timer & Video */
+  
+  /* Timer Box (Left 25%) */
+  
+/* Focus Mode Text */
+.focus-text {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: white; /* Ensure text is visible */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Optional: Adds a shadow for better readability */
+}
+ 
+  
+  /* Video Box (Right 75%) */
+.video-box {
+    width: 100%; /* Full width of the container */
+    height: 90vh; /* 90% of viewport height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent; /* Transparent background */
+    border-radius: 30px; /* Rounded corners */
+    overflow: hidden; /* Ensures rounded corners are visible */
+}
+
+/* YouTube Iframe */
+.youtube-iframe iframe {
+    width: 90vw; /* 70% of viewport width */
+    height: 90vh; /* 90% of viewport height */
+    border-radius: 20px; /* Slightly rounded corners for a modern look */
+    border: none; /* Remove default iframe border */
+}

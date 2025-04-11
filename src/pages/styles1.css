@@ -1,0 +1,159 @@
+/* Basic Page Styles */
+body {
+    font-family: "Arial", sans-serif;
+    background: #f7f7f7;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* App Container */
+  .app {
+    padding: 20px;
+  }
+  
+  /* Sticky Notes Grid */
+  .gratitude-wall {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  
+  
+  
+  /* Sticky Note Card */
+  .sticky-note {
+    width: 220px;
+    min-height: 120px;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 16px;
+    word-wrap: break-word;
+    background-color: var(--random-color);
+    border-radius: 10px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+    transform: rotate(var(--random-rotation));
+    transition: transform 0.2s ease-in-out, box-shadow 0.3s;
+  }
+  
+  /* Rotate Notes Randomly */
+  .sticky-note:nth-child(even) {
+    transform: rotate(2deg);
+  }
+  
+  /* Hover Effect for a Floating Look */
+  .sticky-note:hover {
+    transform: scale(1.05) rotate(0deg);
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Soft, Pastel Colors for Mental Health Boost */
+  .sticky-note:nth-child(1n) { background: #ffeb99; } /* Light Yellow */
+  .sticky-note:nth-child(2n) { background: #ffb6b9; } /* Soft Pink */
+  .sticky-note:nth-child(3n) { background: #a5dee5; } /* Gentle Blue */
+  .sticky-note:nth-child(4n) { background: #b5e7a0; } /* Calming Green */
+  .sticky-note:nth-child(5n) { background: #ffdac1; } /* Peach */
+  .sticky-note:nth-child(6n) { background: #ff9aa2; } /* Rose */
+  
+/* Random Rotation for Notes */
+.sticky-note:nth-child(odd) {
+    --random-rotation: -3deg;
+  }
+  
+  .sticky-note:nth-child(even) {
+    --random-rotation: 3deg;
+  }
+  
+  /* Add Fade-in Animation for New Notes */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .sticky-note.new {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  /* Remove Button */
+  .delete-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .delete-btn:hover {
+    transform: scale(1.2);
+  }
+  
+  /* Input Form */
+  .note-form input {
+    width: 300px;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    font-size: 16px;
+    outline: none;
+    transition: 0.3s ease-in-out;
+  }
+  
+  .note-form input:focus {
+    border-color: #4caf50;
+  }
+  
+  /* Add Note Button */
+  .note-form button {
+    padding: 10px 15px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s ease-in-out;
+  }
+  
+  .note-form button:hover {
+    background: #388e3c;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Adds space between buttons */
+    margin-top: 10px;
+  }
+  
+  .export-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .export-button:hover {
+    background-color: #0056b3;
+  }
+
+  
