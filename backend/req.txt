@@ -1,0 +1,7 @@
+flask
+flask-cors
+langchain
+langchain_groq
+faiss-cpu
+sentence-transformers
+pypdf

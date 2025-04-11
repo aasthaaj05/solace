@@ -44,6 +44,9 @@ Depending on their selected mood, they are presented with tailored features to e
 ### Sad Mood Features
 
 - **Community Chat**: Students can join discussions with peers facing similar challenges in the form of avatars, keeping their identity anonymous.
+
+ ![Community-Chat](public/images/community-chat.jpeg)
+
 - **AI-Powered Chatbot**: Available 24/7 for mental health support.
 
   ![Chatbot](public/images/chatbot.jpeg)
@@ -103,7 +106,9 @@ To increase user engagement, students earn coins upon completing tasks such as:
 - **Frontend**: ReactJS
 - **Backend**: Flask
 - **Database & Authentication**: Firebase
-- Website link: https://solace-q8l7n26nh-aasthas-projects-6f0b59b0.vercel.app/
+
+- Website link: https://bit.ly/solace-vercel
+
   
 
 ## Future Plans
@@ -115,3 +120,11 @@ We plan to expand Solace with the following features:
 - **AI-Based Engagement Analysis**: Using algorithms to analyze user engagement patterns and derive insights about their mental well-being.
 - **Automated Exam Scheduling**: Instead of requiring students to manually enter exam schedules, Solace will sync with their school's curriculum for seamless scheduling.
 - **Intelligent Gratitude & Achievement Recognition**: Automatically identifying user achievements and gratitude moments from their "Let It Out" entries, reducing the need for manual input and promoting self-appreciation.
+
+
+## Contributors 
+- [@Shloka-Shinde](https://github.com/Shloka-Shinde)
+- [@Mruganksha](https://github.com/Mruganksha)
+- [@aasthaaj05](https://github.com/aasthaaj05)
+- [@akanshapatil25](https://github.com/akanshapatil25)
+
