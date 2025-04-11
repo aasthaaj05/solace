@@ -8,8 +8,6 @@ import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import StudNavbar from "../StudNavbar";
 import { auth, db } from "../../../firebase"; 
 
-
-
 function Spinner() {
   const initialItems = [
     "Deep breathing (5 min)",
@@ -41,7 +39,7 @@ function Spinner() {
   const [key, setKey] = useState(0);
   const [history, setHistory] = useState(() => JSON.parse(localStorage.getItem("history")) || []);
   const [completedTasks, setCompletedTasks] = useState(() => JSON.parse(localStorage.getItem("completedTasks")) || []);
-const [remainingItems, setRemainingItems] = useState(() => JSON.parse(localStorage.getItem("remainingItems")) || initialItems);
+  const [remainingItems, setRemainingItems] = useState(() => JSON.parse(localStorage.getItem("remainingItems")) || initialItems);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [showQuestion, setShowQuestion] = useState(false);
   const [showWrongPopup, setShowWrongPopup] = useState(false);
@@ -49,19 +47,17 @@ const [remainingItems, setRemainingItems] = useState(() => JSON.parse(localStora
   const [dailyGoal, setDailyGoal] = useState(5); // Daily goal of 5 tasks
   const [tasksCompletedToday, setTasksCompletedToday] = useState(() => parseInt(localStorage.getItem("tasksCompletedToday")) || 0);
   const [showCompletedTasks, setShowCompletedTasks] = useState(false); // Toggle for completed tasks
-  const [coins, setCoins] = useState(0);
+  const [newTask, setNewTask] = useState("");
 
-   // Load saved data from localStorage
-   const savedCompletedTasks = JSON.parse(localStorage.getItem("completedTasks")) || [];
-   const savedHistory = JSON.parse(localStorage.getItem("history")) || [];
-   const savedRemainingItems = JSON.parse(localStorage.getItem("remainingItems")) || initialItems;
-   const savedTasksCompletedToday = parseInt(localStorage.getItem("tasksCompletedToday")) || 0;
-   const lastResetTime = parseInt(localStorage.getItem("lastResetTime")) || Date.now();
+  // Load saved data from localStorage
+  const savedCompletedTasks = JSON.parse(localStorage.getItem("completedTasks")) || [];
+  const savedHistory = JSON.parse(localStorage.getItem("history")) || [];
+  const savedRemainingItems = JSON.parse(localStorage.getItem("remainingItems")) || initialItems;
+  const savedTasksCompletedToday = parseInt(localStorage.getItem("tasksCompletedToday")) || 0;
+  const lastResetTime = parseInt(localStorage.getItem("lastResetTime")) || Date.now();
 
   // Load data from localStorage on component mount
-  useEffect(() => {
-
-    
+ /* useEffect(() => {
     const savedCompletedTasks = JSON.parse(localStorage.getItem("completedTasks")) || [];
     const savedHistory = JSON.parse(localStorage.getItem("history")) || [];
     const savedRemainingItems = JSON.parse(localStorage.getItem("remainingItems")) || initialItems;
@@ -82,7 +78,7 @@ const [remainingItems, setRemainingItems] = useState(() => JSON.parse(localStora
       resetGame();
       localStorage.setItem("lastResetTime", currentTime.toString()); // Update last reset time
     }
-  }, []);
+  }, []);*/
  
   useEffect(() => {
     localStorage.setItem("history", JSON.stringify(history));
@@ -91,51 +87,26 @@ const [remainingItems, setRemainingItems] = useState(() => JSON.parse(localStora
     localStorage.setItem("tasksCompletedToday", tasksCompletedToday.toString());
   }, [history, completedTasks, remainingItems, tasksCompletedToday]);
   
+ 
+ 
   useEffect(() => {
-    const lastResetTime = parseInt(localStorage.getItem("lastResetTime")) || Date.now();
-    const currentTime = Date.now();
-    const twentyFourHours = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+    const today = new Date().toDateString(); // e.g., "Mon Apr 08 2025"
+    const lastResetDate = localStorage.getItem("lastResetDate");
   
-    if (currentTime - lastResetTime >= twentyFourHours) {
+    if (lastResetDate !== today) {
       resetGame();
-      localStorage.setItem("lastResetTime", currentTime.toString());
+      localStorage.setItem("lastResetDate", today); // Save the reset date
     }
   }, []);
-  
-
-  // Reset daily progress every 24 hours
-  useEffect(() => {
-    const resetInterval = setInterval(() => {
-      setTasksCompletedToday(0);
-      localStorage.setItem("tasksCompletedToday", "0");
-    }, 24 * 60 * 60 * 1000); // 24 hours in milliseconds
-
-    return () => clearInterval(resetInterval);
-  }, []);
 
 
-  useEffect(() => {
-    const fetchCoins = async () => {
-      const userRef = doc(db, "users", "user1"); // Change "user1" to dynamic user ID if needed
-      const docSnap = await getDoc(userRef);
-  
-      if (docSnap.exists()) {
-        setCoins(docSnap.data().coins);
-      } else {
-        await setDoc(userRef, { coins: 0 });
-        setCoins(0);
-      }
-    };
-  
-    fetchCoins();
-  }, []);
-  
   const handleClose = () => {
     setShow(false);
     if (remainingItems.length === 0) {
       resetGame();
     }
   };
+  
   const handleShow = (item) => {
     setWinner(item);
     setShow(true);
@@ -153,6 +124,16 @@ const [remainingItems, setRemainingItems] = useState(() => JSON.parse(localStora
       localStorage.setItem("remainingItems", JSON.stringify(updatedItems)); // Save immediately
       return updatedItems;
     });
+  };
+  
+  const handleAddTask = () => {
+    const trimmedTask = newTask.trim();
+    if (trimmedTask && !remainingItems.includes(trimmedTask)) {
+      const updatedItems = [...remainingItems, trimmedTask];
+      setRemainingItems(updatedItems);
+      setNewTask(""); // Clear input
+      localStorage.setItem("remainingItems", JSON.stringify(updatedItems));
+    }
   };
   
 
@@ -173,38 +154,57 @@ const [remainingItems, setRemainingItems] = useState(() => JSON.parse(localStora
   const handleSubmit = async () => {
     if (selectedIndex !== null) {
       const task = history[selectedIndex];
+      const newTasksCompleted = tasksCompletedToday + 1;
   
       setCompletedTasks((prevCompletedTasks) => [...prevCompletedTasks, task]);
-      setTasksCompletedToday((prevCount) => prevCount + 1);
+      setTasksCompletedToday(newTasksCompleted);
       setHistory((prevHistory) => prevHistory.filter((_, i) => i !== selectedIndex));
+      setSelectedIndex(null);
+      setShowQuestion(false);
   
       try {
-        const user = auth.currentUser; // Get the logged-in user
-        if (!user) {
-          console.error("No authenticated user found!");
-          return;
+        const user = auth.currentUser;
+  
+        if (user) {
+          const userId = user.uid;
+  
+          // 1️⃣ UPDATE COINS
+          const coinDocRef = doc(db, "coins", userId);
+          const coinSnap = await getDoc(coinDocRef);
+  
+          if (coinSnap.exists()) {
+            const currentCoins = coinSnap.data().coins || 0;
+            await updateDoc(coinDocRef, {
+              coins: currentCoins + 10,
+            });
+          } else {
+            await setDoc(coinDocRef, { coins: 10 });
+          }
+  
+          // 2️⃣ ADD TO completedTasks COLLECTION
+          const completedTaskRef = doc(db, "completedTasks", userId);
+          const completedSnap = await getDoc(completedTaskRef);
+  
+          if (completedSnap.exists()) {
+            const existingTasks = completedSnap.data().tasks || [];
+            await updateDoc(completedTaskRef, {
+              tasks: [...existingTasks, { task, timestamp: Date.now() }],
+            });
+          } else {
+            await setDoc(completedTaskRef, {
+              tasks: [{ task, timestamp: Date.now() }],
+            });
+          }
+  
+          console.log("✅ Task logged in Firebase!");
         }
-  
-        const userCoinsRef = doc(db, "coins", user.uid); // Use the correct collection name
-  
-        // Check if the document exists
-        const docSnap = await getDoc(userCoinsRef);
-        if (docSnap.exists()) {
-          await updateDoc(userCoinsRef, { 
-            coins: (docSnap.data().coins || 0) + 10 // Ensure coins field exists
-          });
-        } else {
-          await setDoc(userCoinsRef, { coins: 10 }); // Initialize if it doesn't exist
-        }
-  
-        setCoins((prevCoins) => prevCoins + 10);
-        setSelectedIndex(null);
-        setShowQuestion(false);
       } catch (error) {
-        console.error("Error updating coins:", error);
+        console.error("⚠️ Error updating Firebase:", error);
       }
     }
   };
+  
+  
 
   const closeQuestionPopup = () => {
     setShowQuestion(false); // Close the question popup without submitting
@@ -231,13 +231,18 @@ const [remainingItems, setRemainingItems] = useState(() => JSON.parse(localStora
     setRemainingItems(initialItems);
     setCompletedTasks([]);
     setTasksCompletedToday(0);
+    setKey((prevKey) => prevKey + 1); // 🔄 Force SpinWheel reset
   
     localStorage.setItem("history", JSON.stringify([]));
     localStorage.setItem("remainingItems", JSON.stringify(initialItems));
     localStorage.setItem("completedTasks", JSON.stringify([]));
     localStorage.setItem("tasksCompletedToday", "0");
-    localStorage.setItem("lastResetTime", Date.now().toString());
+    localStorage.setItem("lastResetDate", new Date().toDateString());
+
+  
+    console.log("🔄 Game and spinner reset!");
   };
+  
   
 
   const calculateDynamicFontSize = () => {
@@ -249,13 +254,9 @@ const [remainingItems, setRemainingItems] = useState(() => JSON.parse(localStora
     <>
       {showConfetti && <Confetti /> /* 🎉 Show confetti when winner popup appears */}
 
-       {/* Navbar */}
-       <StudNavbar />
+      {/* Navbar */}
+      <StudNavbar />
       
-      <div className="coins-container">
-  <h2>💰 Coins: {coins}</h2>
-</div>
-
       {/* Spin Wheel Section */}
       <div className="tab-content">
         {remainingItems.length > 1 ? (
@@ -295,6 +296,18 @@ const [remainingItems, setRemainingItems] = useState(() => JSON.parse(localStora
           </button>
         )}
       </div>
+      <div className="add-task-container">
+  <input
+    type="text"
+    placeholder="Enter your own task"
+    value={newTask}
+    onChange={(e) => setNewTask(e.target.value)}
+    className="task-input"
+  />
+  <button onClick={handleAddTask} className="add-task-button">
+    ➕ Add Task
+  </button>
+</div>
 
       <div className="tabs">
         <button
@@ -312,61 +325,60 @@ const [remainingItems, setRemainingItems] = useState(() => JSON.parse(localStora
       </div>
 
       {/* Completed Tasks Section */}
-{showCompletedTasks && (
-  <div className="completed-tasks-container">
-    <h3>✅ Completed Tasks</h3>
-    <ul className="completed-tasks-list">
-      {completedTasks.length === 0 ? (
-        <li className="completed-task">No tasks completed yet.</li>
-      ) : (
-        
-        completedTasks.map((task, index) => (
-          <li key={index} className="completed-task">
-            <span>{task}</span>
-          </li>
-        ))
+      {showCompletedTasks && (
+        <div className="completed-tasks-container">
+          <h3>✅ Completed Tasks</h3>
+          <ul className="completed-tasks-list">
+            {completedTasks.length === 0 ? (
+              <li className="completed-task">No tasks completed yet.</li>
+            ) : (
+              completedTasks.map((task, index) => (
+                <li key={index} className="completed-task">
+                  <span>{task}</span>
+                </li>
+              ))
+            )}
+          </ul>
+          {/* Progress Bar */}
+          <div className="progress-bar-container">
+            <div className="progress-bar">
+              <div
+                className="progress-bar-fill"
+                style={{
+                  width: `${(tasksCompletedToday / dailyGoal) * 100}%`,
+                }}
+              ></div>
+            </div>
+            <p className="progress-text">
+              {tasksCompletedToday}/{dailyGoal} tasks completed today
+            </p>
+          </div>
+        </div>
       )}
-    </ul>
-    {/* Progress Bar */}
-    <div className="progress-bar-container">
-      <div className="progress-bar">
-        <div
-          className="progress-bar-fill"
-          style={{
-            width: `${(tasksCompletedToday / dailyGoal) * 100}%`,
-          }}
-        ></div>
-      </div>
-      <p className="progress-text">
-        {tasksCompletedToday}/{dailyGoal} tasks completed today
-      </p>
-    </div>
-  </div>
-)}
 
-{/* Task History Section */}
-{!showCompletedTasks && (
-  <div className="history-container">
-    <h3>📝 Task History:</h3>
-    <ul>
-      {history.length === 0 ? (
-        <li>No spins yet.</li>
-      ) : (
-        history.map((item, index) => (
-          <li key={index} className="history-item">
-            <span className="history-text">{item}</span>
-            <button className="check-button" onClick={() => handleCheck(index)}>
-              ✔️
-            </button>
-            <button className="wrong-button" onClick={() => handleWrong(index)}>
-              ❌
-            </button>
-          </li>
-        ))
+      {/* Task History Section */}
+      {!showCompletedTasks && (
+        <div className="history-container">
+          <h3>📝 Task History:</h3>
+          <ul>
+            {history.length === 0 ? (
+              <li>No spins yet.</li>
+            ) : (
+              history.map((item, index) => (
+                <li key={index} className="history-item">
+                  <span className="history-text">{item}</span>
+                  <button className="check-button" onClick={() => handleCheck(index)}>
+                    ✔️
+                  </button>
+                  <button className="wrong-button" onClick={() => handleWrong(index)}>
+                    ❌
+                  </button>
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
       )}
-    </ul>
-  </div>
-)}
 
       {/* 🎉 Winner Modal with Celebration */}
       {show && (
@@ -412,6 +424,12 @@ const [remainingItems, setRemainingItems] = useState(() => JSON.parse(localStora
           </div>
         </div>
       )}
+ <div className="test-button">
+<button className="reset-button" onClick={resetGame}>
+  🔄 Reset Game
+</button>
+</div>
+
     </>
   );
 }
